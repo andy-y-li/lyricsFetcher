@@ -1,0 +1,25 @@
+#
+#
+#
+#
+#
+
+#target directory.
+dir = ~/lyrics
+
+#file name to save.
+#ar : artist
+#ti : title
+#al : album
+fileFormat ="$(ar) - $(ti)"
+
+
+
+#auto select when have multi lyrics
+# 1 :  always choose the first one
+# 2 :  choose all
+autoSelect = 1
+
+
+
+
