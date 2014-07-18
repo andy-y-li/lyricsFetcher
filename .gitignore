@@ -1,66 +1,16 @@
-build/Debug/lyricsFetcher
-build/Debug/test
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/build-state.dat
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/build-state~.dat
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/dgph
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/lyricsFetcher-all-target-headers.hmap
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/lyricsFetcher-generated-files.hmap
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/lyricsFetcher-own-target-headers.hmap
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/lyricsFetcher-project-headers.hmap
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/lyricsFetcher.dep
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/lyricsFetcher.hmap
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/lyricsFetcher~.dep
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/lrcFch.d
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/lrcFch.dia
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/lrcFch.o
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/lyricsFetcher.LinkFileList
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/lyricsFetcher_dependency_info.dat
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/main.d
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/main.dia
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/main.o
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/stringConv.d
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/stringConv.dia
-build/lyricsFetcher.build/Debug/lyricsFetcher.build/Objects-normal/x86_64/stringConv.o
-build/lyricsFetcher.build/Debug/test.build/build-state.dat
-build/lyricsFetcher.build/Debug/test.build/build-state~.dat
-build/lyricsFetcher.build/Debug/test.build/dgph
-build/lyricsFetcher.build/Debug/test.build/lyricsFetcher copy-all-target-headers.hmap
-build/lyricsFetcher.build/Debug/test.build/lyricsFetcher copy-generated-files.hmap
-build/lyricsFetcher.build/Debug/test.build/lyricsFetcher copy-own-target-headers.hmap
-build/lyricsFetcher.build/Debug/test.build/lyricsFetcher copy-project-headers.hmap
-build/lyricsFetcher.build/Debug/test.build/lyricsFetcher copy.hmap
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/fileCtrl.d
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/fileCtrl.dia
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/fileCtrl.o
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/lrcFch.d
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/lrcFch.dia
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/lrcFch.o
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/lyricsFetcher copy.LinkFileList
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/stringConv.d
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/stringConv.dia
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/stringConv.o
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/test.d
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/test.dia
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/test.LinkFileList
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/test.o
-build/lyricsFetcher.build/Debug/test.build/Objects-normal/x86_64/test_dependency_info.dat
-build/lyricsFetcher.build/Debug/test.build/test-all-target-headers.hmap
-build/lyricsFetcher.build/Debug/test.build/test-generated-files.hmap
-build/lyricsFetcher.build/Debug/test.build/test-own-target-headers.hmap
-build/lyricsFetcher.build/Debug/test.build/test-project-headers.hmap
-build/lyricsFetcher.build/Debug/test.build/test.dep
-build/lyricsFetcher.build/Debug/test.build/test.hmap
-build/lyricsFetcher.build/Debug/test.build/test~.dep
-lyricsFetcher.xcodeproj/project.xcworkspace/xcuserdata/pingxian.liang.xcuserdatad/WorkspaceSettings.xcsettings
+build/*
+src/autom4te.cache
+src/.deps/*
+src/.deps
+src/autoscan.log
+yricsFetcher.xcodeproj/project.xcworkspace/xcuserdata/pingxian.liang.xcuserdatad/WorkspaceSettings.xcsettings
 lyricsFetcher.xcodeproj/project.xcworkspace/xcuserdata/pingxian.liang.xcuserdatad/xcdebugger/Expressions.xcexplist
 lyricsFetcher.xcodeproj/xcuserdata/pingxian.liang.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
 lyricsFetcher.xcodeproj/xcuserdata/pingxian.liang.xcuserdatad/xcschemes/lyricsFetcher.xcscheme
 lyricsFetcher.xcodeproj/xcuserdata/pingxian.liang.xcuserdatad/xcschemes/test.xcscheme
 lyricsFetcher.xcodeproj/xcuserdata/pingxian.liang.xcuserdatad/xcschemes/xcschememanagement.plist
-src/fileCtrl.o
-src/lrcFch.o
-src/main.o
 src/tags
 contents.xcworkspacedata
 *.swo
 *.o
+stamp-h1

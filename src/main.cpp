@@ -45,11 +45,13 @@ void * lrcFchThread(void* lrcFchArg)
 }
 
 
-void addJobIsFileAudio(const char * file ,void *arg)
+void* addJobIsFileAudio(const char * file ,void *arg)
 {
     if (file /*is audio*/) {
-        pool_add_job(lrcFchThread, &lrcFchArg );
+        pool_add_job(lrcFchThread, arg);
     }
+    
+    return nullptr;
 }
 
 //argv is utf-8 format code string.
@@ -79,7 +81,8 @@ int main(int argc, const char * argv[]) {
     
     pool_init(4);
     
-    IterFiles(string ("/Users/shijunhe/Music/Music"), string ("/Users/shijunhe/Music/Music"), addJobIsFileAudio, lrcFchArg );
+ 
+    IterFiles(string ("/Users/shijunhe/Music/Music"), string ("/Users/shijunhe/Music/Music"), addJobIsFileAudio, (void*)&lrcFchArg );
    
     
     pool_destroy();
