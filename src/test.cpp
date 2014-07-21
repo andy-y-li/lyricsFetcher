@@ -13,15 +13,34 @@
 #include "stringConv.h"
 #include "lrcFch.h"
 #include "stringConv.h"
+#include <arpa/inet.h>
+
+
+#include "audioTag.h"
 
 SearchLyric s;
+
+bool isBigEndian()
+{
+    int t = 1;
+    int t2 = htons(t);
+
+    return t == t2;
+}
 
 
 void test()
 {
    std::string result ;
     
-    
+ 
+  if(isBigEndian() )
+	  printf("isBigEndian network byte order");
+  else
+	  printf("isLittleEndian");
+
+
+
     char test1[] = "camillabroken";
     result =  str2UnicodeCode(test1,sizeof(test1)/sizeof(test1[0]) );
     assert(result.compare("630061006D0069006C006C006100620072006F006B0065006E00") == 0 );
@@ -48,20 +67,30 @@ void test()
 void testIterFiles()
 {
     IterFiles(string("/Users/shijunhe/Download2"), string("/Users/shijunhe/Download2") , nullptr , 0);
-    
-    
 }
 
 
 
+void testFunctionInTaglib()
+{
+   char artist[128] ={0};
+   char title[128]={0};
+   const char filename[] =  "/Users/shijunhe/Music/Music/Beat It.mp3";
 
+   getId3Info(filename , artist ,title );
+
+   printf("歌手:%s , 标题 :%s\n", artist , title );
+}
 
 
 //argv is utf-8 format code string.
 int main(int argc, const char * argv[]) {
     
-    
-    
+    testFunctionInTaglib();
+
+    return 0;
+
+
     test();
     
     testIterFiles();

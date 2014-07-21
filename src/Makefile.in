@@ -94,11 +94,12 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_lyricFetcher_OBJECTS = fileCtrl.$(OBJEXT) lrcFch.$(OBJEXT) \
-	main.$(OBJEXT) stringConv.$(OBJEXT) threadpool.$(OBJEXT)
+	main.$(OBJEXT) stringConv.$(OBJEXT) threadpool.$(OBJEXT) \
+	audioTag.$(OBJEXT)
 lyricFetcher_OBJECTS = $(am_lyricFetcher_OBJECTS)
 lyricFetcher_LDADD = $(LDADD)
 am_test_OBJECTS = test.$(OBJEXT) fileCtrl.$(OBJEXT) lrcFch.$(OBJEXT) \
-	stringConv.$(OBJEXT) threadpool.$(OBJEXT)
+	stringConv.$(OBJEXT) threadpool.$(OBJEXT) audioTag.$(OBJEXT)
 test_OBJECTS = $(am_test_OBJECTS)
 test_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -197,12 +198,12 @@ AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@
+CFLAGS = $(MYFLAGS)
 CPP = @CPP@
-CPPFLAGS = @CPPFLAGS@
+CPPFLAGS = $(MYFLAGS)
 CXX = @CXX@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@
+CXXFLAGS = $(MYFLAGS)
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
@@ -219,7 +220,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
-LIBS = @LIBS@
+LIBS = -ltag
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
@@ -280,8 +281,12 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
-lyricFetcher_SOURCES = fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h main.cpp stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp
-test_SOURCES = test.cpp fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp
+COMPILE_FLAGS = -g -W0
+LIBDIR = -L/usr/local/lib
+INCLUDES = -I/usr/local/include
+MYFLAGS = $(COMPILE_FLAGS) $(LIBS) $(INCLUDES) $(LIBDIR)
+lyricFetcher_SOURCES = fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h main.cpp stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp
+test_SOURCES = test.cpp fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -393,6 +398,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audioTag.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileCtrl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lrcFch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@

@@ -94,11 +94,12 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_lyricFetcher_OBJECTS = fileCtrl.$(OBJEXT) lrcFch.$(OBJEXT) \
-	main.$(OBJEXT) stringConv.$(OBJEXT) threadpool.$(OBJEXT)
+	main.$(OBJEXT) stringConv.$(OBJEXT) threadpool.$(OBJEXT) \
+	audioTag.$(OBJEXT)
 lyricFetcher_OBJECTS = $(am_lyricFetcher_OBJECTS)
 lyricFetcher_LDADD = $(LDADD)
 am_test_OBJECTS = test.$(OBJEXT) fileCtrl.$(OBJEXT) lrcFch.$(OBJEXT) \
-	stringConv.$(OBJEXT) threadpool.$(OBJEXT)
+	stringConv.$(OBJEXT) threadpool.$(OBJEXT) audioTag.$(OBJEXT)
 test_OBJECTS = $(am_test_OBJECTS)
 test_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_$(V))
@@ -197,12 +198,12 @@ AUTOMAKE = ${SHELL} /Users/shijunhe/Movies/lyricsFetcher/src/missing automake-1.
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2
+CFLAGS = $(MYFLAGS)
 CPP = gcc -E
-CPPFLAGS = 
+CPPFLAGS = $(MYFLAGS)
 CXX = g++
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = $(MYFLAGS)
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -219,7 +220,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS =  ${LIBOBJDIR}lstat$U.o
-LIBS = 
+LIBS = -ltag
 LTLIBOBJS =  ${LIBOBJDIR}lstat$U.lo
 MAKEINFO = ${SHELL} /Users/shijunhe/Movies/lyricsFetcher/src/missing makeinfo
 MKDIR_P = ./install-sh -c -d
@@ -280,8 +281,12 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 AUTOMAKE_OPTIONS = foreign
-lyricFetcher_SOURCES = fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h main.cpp stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp
-test_SOURCES = test.cpp fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp
+COMPILE_FLAGS = -g -W0
+LIBDIR = -L/usr/local/lib
+INCLUDES = -I/usr/local/include
+MYFLAGS = $(COMPILE_FLAGS) $(LIBS) $(INCLUDES) $(LIBDIR)
+lyricFetcher_SOURCES = fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h main.cpp stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp
+test_SOURCES = test.cpp fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -393,6 +398,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/audioTag.Po
 include ./$(DEPDIR)/fileCtrl.Po
 include ./$(DEPDIR)/lrcFch.Po
 include ./$(DEPDIR)/main.Po

@@ -79,10 +79,10 @@ int main(int argc, const char * argv[]) {
     
     
     
-    pool_init(4);
+    pool_init(1);
     
  
-    IterFiles(string ("/Users/shijunhe/Music/Music"), string ("/Users/shijunhe/Music/Music"), addJobIsFileAudio, (void*)&lrcFchArg );
+    IterFiles(string ("/Users/shijunhe/Music/Music/abc"), string ("/Users/shijunhe/Music/Music/abc"), addJobIsFileAudio, (void*)&lrcFchArg );
    
     
     pool_destroy();
