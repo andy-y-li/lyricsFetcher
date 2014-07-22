@@ -31,6 +31,7 @@ bool getId3Info(const char * filename , char *artist , char * title  )
     bool bInvalidID3V2= false;
     if(id3v2tag)
     {
+	    TagLib::String;
             strcpy(artist,id3v2tag->artist().toCString());
             strcpy(title,id3v2tag->title().toCString());
             
