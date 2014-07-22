@@ -31,9 +31,8 @@ bool getId3Info(const char * filename , char *artist , char * title  )
     bool bInvalidID3V2= false;
     if(id3v2tag)
     {
-	    TagLib::String;
-            strcpy(artist,id3v2tag->artist().toCString());
-            strcpy(title,id3v2tag->title().toCString());
+        strcpy(artist,(const char*) id3v2tag->artist().toCString(true));
+        strcpy(title,id3v2tag->title().toCString(true));
             
             
             if ( strlen(title) == 0  || strlen(artist)==0 )
@@ -62,8 +61,8 @@ bool getId3Info(const char * filename , char *artist , char * title  )
         id3v1tag = f.ID3v1Tag();
         if(id3v1tag)
         {
-            strcpy(artist,id3v1tag->artist().toCString());
-            strcpy(title,id3v1tag->title().toCString());
+            strcpy(artist,id3v1tag->artist().toCString(true));
+            strcpy(title,id3v1tag->title().toCString(true));
             
             //the id3v1tag string may be wrongly
             //like Œ“∫‹∫√0000fsadfsdf...
@@ -102,7 +101,7 @@ bool getId3Info(const char * filename , char *artist , char * title  )
     }
     
     
-    return id3v2tag || id3v1tag;
+    return (id3v2tag || id3v1tag) && (strlen(artist) > 1 || strlen(title) >1 ) ;
 }
 
 

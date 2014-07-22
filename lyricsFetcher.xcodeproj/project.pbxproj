@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B235997A197CF67C00F51E43 /* audioTag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2359978197CF67C00F51E43 /* audioTag.cpp */; };
+		B235997B197CF67C00F51E43 /* audioTag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2359978197CF67C00F51E43 /* audioTag.cpp */; };
 		B2690AC0196BD2E30076715F /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2690ABE196BD2E30076715F /* threadpool.cpp */; };
 		B2690AC3196BD4860076715F /* fileCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2690AC1196BD4860076715F /* fileCtrl.cpp */; };
 		B2690AC4196BD5F10076715F /* fileCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2690AC1196BD4860076715F /* fileCtrl.cpp */; };
@@ -41,6 +43,8 @@
 
 /* Begin PBXFileReference section */
 		B22E1B3419667407007A8086 /* lyricsFetcher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lyricsFetcher; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2359978197CF67C00F51E43 /* audioTag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioTag.cpp; sourceTree = "<group>"; };
+		B2359979197CF67C00F51E43 /* audioTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioTag.h; sourceTree = "<group>"; };
 		B2690ABE196BD2E30076715F /* threadpool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = threadpool.cpp; sourceTree = "<group>"; };
 		B2690ABF196BD2E30076715F /* threadpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadpool.h; sourceTree = "<group>"; };
 		B2690AC1196BD4860076715F /* fileCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileCtrl.cpp; sourceTree = "<group>"; };
@@ -78,7 +82,6 @@
 				B2F9C31F196A530A00632FD2 /* test */,
 				B2F9C311196A510B00632FD2 /* src */,
 				B22E1B3519667407007A8086 /* Products */,
-				B2F9C31C196A513B00632FD2 /* build */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +98,8 @@
 			isa = PBXGroup;
 			children = (
 				B2F9C314196A510B00632FD2 /* main.cpp */,
+				B2359978197CF67C00F51E43 /* audioTag.cpp */,
+				B2359979197CF67C00F51E43 /* audioTag.h */,
 				B2E0F726196A7AF00007E064 /* lrcFch.h */,
 				B2E0F725196A7AF00007E064 /* lrcFch.cpp */,
 				B2F9C318196A510B00632FD2 /* stringConv.h */,
@@ -105,13 +110,6 @@
 				B2690AC1196BD4860076715F /* fileCtrl.cpp */,
 			);
 			path = src;
-			sourceTree = "<group>";
-		};
-		B2F9C31C196A513B00632FD2 /* build */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = build;
 			sourceTree = "<group>";
 		};
 		B2F9C31F196A530A00632FD2 /* test */ = {
@@ -197,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2F9C31B196A510B00632FD2 /* stringConv.cpp in Sources */,
+				B235997A197CF67C00F51E43 /* audioTag.cpp in Sources */,
 				B2F9C319196A510B00632FD2 /* main.cpp in Sources */,
 				B2690AC3196BD4860076715F /* fileCtrl.cpp in Sources */,
 				B2E0F727196A7AF00007E064 /* lrcFch.cpp in Sources */,
@@ -209,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2690AC4196BD5F10076715F /* fileCtrl.cpp in Sources */,
+				B235997B197CF67C00F51E43 /* audioTag.cpp in Sources */,
 				B2E0F729196A86CB0007E064 /* stringConv.cpp in Sources */,
 				B2F9C32E196A667300632FD2 /* test.cpp in Sources */,
 				B2E0F728196A7AF00007E064 /* lrcFch.cpp in Sources */,
@@ -251,9 +251,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Applications/Xcode6-Beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				METAL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ltag";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -286,8 +293,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Applications/Xcode6-Beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				METAL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ltag";
 				SDKROOT = macosx;
 			};
 			name = Release;

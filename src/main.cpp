@@ -2,11 +2,20 @@
  * 
  */
 
-
+#include <stdlib.h>
 #include "lrcFch.h"
 #include <pthread.h>
 #include "threadpool.h"
 #include "fileCtrl.h"
+#include "audioTag.h"
+#include <unistd.h>
+
+
+
+
+
+
+
 
 struct lrcFchS
 {
@@ -17,8 +26,10 @@ struct lrcFchS
 
 void lrcFchSInit(lrcFchS *s, const char *a , const char *t, const char *p)
 {
-    strcpy(s->artist, a);
-    strcpy(s->title, t);
+    if(a)
+        strcpy(s->artist, a);
+    if(t)
+        strcpy(s->title, t);
     s->savepath=p;
 }
 
@@ -37,58 +48,53 @@ void * lrcFchThread(void* lrcFchArg)
         sp+=artist;
         sp+="-";
         sp+=title;
+        sp+=".lrc";
         
         sl.Download( 0 ,sp.c_str() );
     }
-    
+    else
+    {
+        printf("thread %u: search failed.\n",pthread_self() );
+    }
+        
     return 0;
 }
 
 
 void* addJobIsFileAudio(const char * file ,void *arg)
 {
-    if (file /*is audio*/) {
-        pool_add_job(lrcFchThread, arg);
+    char *savepath= "/Users/shijunhe/lyrics";
+    
+    lrcFchS * lrcFchArg = (lrcFchS*)malloc(sizeof(lrcFchS)) ;
+    
+    lrcFchArg->savepath = savepath;
+    
+
+    if (getId3Info(file , lrcFchArg->artist,  lrcFchArg->title )    )
+    {
+        //printf("job .. \n");
+        pool_add_job(lrcFchThread, (void*)lrcFchArg );
+        sleep(12);
     }
     
     return nullptr;
 }
 
-//argv is utf-8 format code string.
 int main(int argc, const char * argv[]) {
-    if (argc < 3 ) {
-        printf("Input a artist and title to search\n");
-        return 0;
-    }
-   
-    char *savepath= "/Users/shijunhe/Download2";
+
+    pool_init(4);
     
-    
-    
-    const char *artist = argv[1];
-    const char *title = argv[2];
-   
-    
-    
-//    pthread_t t;
-//    pthread_attr_t attr;
-//    pthread_attr_init(&attr);
-    struct lrcFchS lrcFchArg;
-    lrcFchSInit( &lrcFchArg , artist , title , savepath );
-//    pthread_create(&t, (&attr), lrcFchThread , (void*)&lrcFchArg);
-    
-    
-    
-    pool_init(1);
-    
- 
-    IterFiles(string ("/Users/shijunhe/Music/Music/abc"), string ("/Users/shijunhe/Music/Music/abc"), addJobIsFileAudio, (void*)&lrcFchArg );
-   
+    IterFiles(string ("/Users/shijunhe/Music/Music/abc"), string ("/Users/shijunhe/Music/Music/abc"), addJobIsFileAudio, nullptr );
     
     pool_destroy();
     
     
+    while (1) {
+        printf("~~~.");
+        sleep(2);
+    }
     
+
     
     return 0;
 }

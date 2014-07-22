@@ -70,56 +70,54 @@ void testIterFiles()
 }
 
 
+void  testFunctionInTaglib()
+{
+    char artist[128] ={0};
+    char title[128]={0};
+    //const char filename[] =  "/Users/shijunhe/Music/Music/Beat It.mp3";
+    const char filename[] =  "/Users/shijunhe/Music/iTunes/iTunes\ Media/Music/信乐团/海阔天空/海阔天空.mp3";
+    
+    getId3Info(filename , artist ,title );
+    
+    printf("歌手: %s , 标题 : %s\n", artist ,  title );
+    
+}
 
-void testFunctionInTaglib()
+
+void * testFunctionInTaglib2(const char *file , void *arg)
 {
    char artist[128] ={0};
    char title[128]={0};
-   const char filename[] =  "/Users/shijunhe/Music/Music/Beat It.mp3";
+   //const char filename[] =  "/Users/shijunhe/Music/Music/Beat It.mp3";
+   const char filename[] =  "/Users/shijunhe/Music/iTunes/iTunes\ Media/Music/信乐团/海阔天空/海阔天空.mp3";
 
    getId3Info(filename , artist ,title );
 
-   printf("歌手:%s , 标题 :%s\n", artist , title );
+   printf("歌手: %s , 标题 : %s\n", artist ,  title );
+    
+    return nullptr;
 }
 
 
 //argv is utf-8 format code string.
 int main(int argc, const char * argv[]) {
     
-    testFunctionInTaglib();
-
-    return 0;
+    //testFunctionInTaglib();
 
 
-    test();
+    //test();
     
-    testIterFiles();
-    
-    return 0;
+    //testIterFiles();
     
     
+     const char *artist = "江美琪";
+     const char *title = "爱哭鬼";
+//    const char *artist = "邓紫棋";
+//    const char *title = "泡沫";
     
     
-    
-    
-    
-    if (argc < 3 ) {
-        printf("Input a artist and title to search\n");
-        return 0;
-    }
-    
-    printf("Searching %s  - %s ...\n ",argv[1],argv[2]);
-    //printf("dump hex: %x\n%x",argv[1].argv[2]);
-    
-    const char *artist = argv[1];
-    const char *title = argv[2];
-    
-    /*
-    if(s.Init() )
-    {
-        s.Search(artist,title);
-        s.ParseResult();
-        
+        if(s.Search(artist,title) )
+        {
         
         printf("Now , choose a index to download please : ");
         int index=-1;
@@ -136,9 +134,7 @@ int main(int argc, const char * argv[]) {
         
         char *saveFile = "/Users/shijunhe/Download2/a.lrc";
         s.Download(index-1,saveFile);
-    }
-    */
     
-    
+        }
     return 0;
 }

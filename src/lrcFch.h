@@ -55,7 +55,9 @@ public:
     
     
     SearchLyric();
-
+    
+    ~SearchLyric();
+    
     /**search and parse result
     *return the result lyrics numbers
      */
@@ -73,18 +75,12 @@ private:
 public:
     /**download and save lyrics file to the path.
      */
-    inline BOOL Download(int idx,const char *savepath)
-    {
-        if(_Download(idx, savepath) )
-            return _SaveLyricToFile(savepath);
-        
-        return FALSE;
-    }
+    BOOL Download(int idx,const char *savepath);
     
 private:
-    BOOL _Download(int idx,const char *savepath);
-    BOOL _DownloadLyric(char *id,char *ar,char*ti);
-    BOOL _SaveLyricToFile(const char *filepath);
+    //BOOL _Download(int idx,const char *savepath);
+    BOOL _DownloadLyric(char *id,char *ar,char*ti,const char *savepath);
+    //BOOL _SaveLyricToFile(const char *filepath);
     
     
 private:

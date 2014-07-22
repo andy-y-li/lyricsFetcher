@@ -15,6 +15,10 @@
 
 #include "stringConv.h"
 
+#ifdef DEBUG
+#include <pthread.h>
+#endif
+
 /**
  * is in unix or win-nt
  */
@@ -80,6 +84,9 @@ void CreateQianQianCode(char *id,char *ar,char*ti,std::string &code)
     std::string arti(ar);
     arti+=ti;
     
+    //printf("%p%s",arti.c_str(),arti.c_str());
+    
+    
     int length=arti.length();
     int *song=new int[length];
     for (int i=0;i<length;++i)
@@ -144,7 +151,7 @@ void CreateQianQianCode(char *id,char *ar,char*ti,std::string &code)
         t5 = (int)(t6 - 4294967296);
     
     char tmp[20]={0};
-    _itoa(t5,tmp,10);
+    sprintf(tmp, "%d" , t5);
     code=tmp;
 }
 
@@ -162,11 +169,13 @@ void CreateQianQianCode(char *id,char *ar,char*ti,std::string &code)
  lrcct2.ttplayer.com
  ttlrcct.qianqian.com
  ttlrcct2.qianqian.com
+ 
+ baidu : "ttlrc.qianqian.com"
  */
 
 
 
-const char StrServiceDianXin[]="ttlrcct2.qianqian.com";
+const char StrServiceDianXin[]="ttlrc.qianqian.com";
 const char  StrServiceWangTong[]="ttlrccnc.qianqian.com";
 const char  StrServiceDownload[]="ttlrcct2.qianqian.com";
 //ttlrcct.qianqian.com
@@ -179,6 +188,12 @@ SearchLyric::SearchLyric():socketInit(SOCKET_NOT_INIT),downloadSocketInit(FALSE)
 {
     
 }
+
+SearchLyric::~SearchLyric()
+{
+    
+}
+
 INT SearchLyric::InitDownloadSocket()
 {
     if(downloadSocketInit)return 1;
@@ -238,6 +253,7 @@ INT SearchLyric::Init()
     }
     else
     {
+        printf("Can not find server %s\n",StrServiceDianXin);
         goto r;
     }
     
@@ -315,7 +331,8 @@ BOOL SearchLyric::_Search(const char *artist,const char *title)
     }
     
 static	const char *header=
-"GET /dll/lyricsvr.dll?sh?Artist=%s&Title=%s&Flags=2&ci=525b525b56454d7178646432492b345316101c0265631a5d5157535e55424c671c464808425c5353011d01 HTTP/1.1\r\n\
+"GET /dll/lyricsvr.dll?sh?Artist=%s&Title=%s&From=BaiduMusic&Version=9.0.4.7&Flags=2&ci=DFA9CA1B1B08DC38323AB6D936BEF0D2 HTTP/1.1\r\n\
+Connection: Keep-Alive\r\n\
 Host: %s\r\n\
 \r\n\0\0";
     
@@ -346,6 +363,8 @@ Host: %s\r\n\
         strRecv+=tmp;
         memset(buf,0,RECV_BUF_LEN);
     }
+   
+    
     
     free(buf);
     closesocket(outS);
@@ -390,8 +409,10 @@ BOOL SearchLyric::_ParseResult()
                 vecLrcLines.push_back(r[i]);
             }
             
+
+            printf("%u %d : %s ,%s , %s \n",pthread_self(),lineIndex,r[0].c_str(),r[1].c_str(), r[2].c_str());
+            
             lineIndex++;
-            printf("%d :%s , %s \n",lineIndex,r[1].c_str(), r[2].c_str());
         }
         
         
@@ -400,6 +421,7 @@ BOOL SearchLyric::_ParseResult()
     return vecLrcLines.size();
 }
 
+/*
 BOOL SearchLyric::_SaveLyricToFile(const char *filepath)
 {
     BOOL ret=FALSE;
@@ -433,66 +455,148 @@ BOOL SearchLyric::_SaveLyricToFile(const char *filepath)
     
     return ret;
 }
+*/
 
-
-BOOL SearchLyric::_Download(int idx,const char *savepath)
+BOOL SearchLyric::Download(int idx,const char *savepath)
 {
     assert(idx+1 <= vecLrcLines.size() && idx >=0 );
     
     return _DownloadLyric((char*)vecLrcLines[idx*3].c_str(),
                          (char*)vecLrcLines[idx*3+1].c_str(),
-                         (char*)vecLrcLines[idx*3+2].c_str())
-    ?_SaveLyricToFile(savepath):FALSE;
+                         (char*)vecLrcLines[idx*3+2].c_str(),
+                          savepath);
 }
 
-
-BOOL SearchLyric::_DownloadLyric(char *id,char *ar,char*ti)
+BOOL SearchLyric::_DownloadLyric(char *id,char *ar,char*ti,const char *savepath)
 {
-    InitDownloadSocket();
-    
-    socketDownload=socket(AF_INET,SOCK_STREAM,0);
-    if (socketDownload==INVALID_SOCKET)
-        return FALSE;
-    
-    if(SOCKET_ERROR==::connect(socketDownload,(sockaddr*)&addrDownload,sizeof(addrDownload)))
+    FILE * pFile;
+    pFile = fopen( savepath , ("w") );
+    if (pFile)
     {
-        if (GetLastError()!=10056)
+        InitDownloadSocket();
+        
+        socketDownload=socket(AF_INET,SOCK_STREAM,0);
+        if (socketDownload==INVALID_SOCKET)
             return FALSE;
-    }
-    
-    
-    string code;
-    CreateQianQianCode(id,ar,ti,code);
-    
+        
+        if(SOCKET_ERROR==::connect(socketDownload,(sockaddr*)&addrDownload,sizeof(addrDownload)))
+        {
+            if (GetLastError()!=10056)
+                return FALSE;
+        }
+        
+        
+        string code;
+        CreateQianQianCode(id,ar,ti,code);
+        
 static const  char *header=
-"GET /dll/lyricsvr.dll?dl?Id=%s&Code=%s HTTP/1.1\r\n\
+"GET /dll/lyricsvr.dll?dl?Id=%s&Code=%s&ci=DFA9CA1B1B08DC38323AB6D936BEF0D2 HTTP/1.1\r\n\
 Host: %s\r\n\
-Connection: keep-alive\r\n\
 \r\n\0\0";
-    
-    int strLen=strlen(header)-6 + strlen(id) + code.length() + sizeof(StrServiceDownload);
-    char *sendStr=new char[strLen];
-    sprintf(sendStr,header,id,code.c_str(),StrServiceDownload);
-    
-    //send data
-    int send=0,totalsend=0;
-    for (;(send=::send(socketDownload,sendStr+totalsend,strLen-totalsend,0))>0;totalsend+=send);
-    
-    //recv data
-    char *buf;
-    const int RECV_BUF_LEN =300;
-    buf=(char*)malloc(RECV_BUF_LEN);
-    strRecv.clear();
-    
-    
-    int recv=0;
-    while((recv=::recv(socketDownload,buf,RECV_BUF_LEN,0)) >0)
+        
+        size_t strLen=strlen(header)-6 + strlen(id) + code.length() + sizeof(StrServiceDownload);
+        char *sendStr=new char[strLen];
+        sprintf(sendStr,header,id,code.c_str(),StrServiceDownload);
+        
+        //send data
+        ssize_t send=0,totalsend=0;
+        for (;(send=::send(socketDownload,sendStr+totalsend,strLen-totalsend,0))>0;totalsend+=send);
+        
+        printf("thread %u : download command sended %s ,%s ,%s \n",pthread_self() ,id ,ar ,ti );
+        //printf("\n%s\n",sendStr);
+        
+        //recv data
+        char *buf = NULL;
+        const int RECV_BUF_LEN =2600;
+        buf=(char*)malloc(RECV_BUF_LEN);
+        if (buf)
+        {
+            ssize_t recv=0;
+            recv=::recv(socketDownload,buf,RECV_BUF_LEN,0);
+            if(recv>0)
+            {
+                int iContentLength=0;
+                const char constContentLength[] = "\r\nContent-Length: ";
+                const char constBreakLine[] = "\r\n\r\n";
+                
+                const char find1[]="HTTP/1.";
+                //1.1 or 1.0
+                const char find2[]=" 200 OK";
+                const int  find1Len = sizeof(find1)/sizeof(find1[0])-1;
+                const int find2Len =sizeof(find2)/sizeof(find2[0])-1;
+                if (strncmp(buf, find1, find1Len ) == 0 &&
+                    strncmp(buf + find1Len + 1, find2, find2Len ) == 0
+                    )
+                {
+                    ////find Content-Length and \r\n\r\n
+                    char *contentLength = strstr(buf, constContentLength);
+                    char *breakLine = strstr(buf, constBreakLine);
+                    
+                    if (contentLength)
+                    {
+                        contentLength += sizeof(constContentLength)/sizeof(constContentLength[0]) -1;
+                        
+                        
+                        char *p = strchr(contentLength, '\r');
+                        
+                        char tmp [20] = {0};
+                        strncpy(tmp, contentLength , (int) (p - contentLength)) ;
+                        iContentLength = atoi(tmp);
+                        
+                        
+                        //make sure is lyrics content.
+                        //not the error xml content.
+                        if (breakLine)
+                        {
+                            if (strstr(breakLine, "<?xml version=\"") &&
+                                strstr(breakLine, "encoding=")
+                                )
+                            {
+                                printf("thread %u : Search ID or Code error!\n",pthread_self());
+                                /**<?xml version="1.0" encoding="UTF-8" ?>
+                                 *<result errmsg="Search ID or Code error!" errcode="32006"></result>
+                                 */
+                            }
+                            else
+                            {
+                                breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
+                                
+                                int contentLengthRecv = (int)(buf + recv - breakLine);
+                                
+                                //write to file
+                                
+                                fwrite( breakLine , sizeof(buf[0]) ,  contentLengthRecv ,pFile);
+                                //printf("%u:%s",pthread_self(),breakLine);
+                                
+                                
+                                while (contentLengthRecv < iContentLength )
+                                {
+                                    recv=::recv(socketDownload , buf  , iContentLength - contentLengthRecv , 0 );
+                                    
+                                    contentLengthRecv += recv ;
+                                    
+                                    fwrite( buf  , sizeof(buf[0]) ,  recv , pFile );
+                                }
+                                
+                                fclose(pFile);
+                                printf("thread %u: %d bytes saved to :%s \n",pthread_self(), iContentLength ,savepath);
+                                
+                                
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            free(buf);
+        }
+    }
+    else
     {
-        string tmp(buf,buf+recv);
-        strRecv+=tmp;
+        printf("Unable to open file %s \n",savepath);
     }
     
-    free(buf);
     
     return TRUE;
 }
