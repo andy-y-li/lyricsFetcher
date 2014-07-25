@@ -10,10 +10,34 @@
 #include "audioTag.h"
 #include <unistd.h>
 
+#include <sys/stat.h>//stat
 
 
+#ifdef DEBUG
+#include <assert.h>
+#endif
 
 
+/**
+ * brief "artist" , "title" , "/a/b"  to "/a/b/artist-title.lrc"
+ * param lyricsFilename : path to save. without a '/'.
+ */
+char *GenerateLyricsName(const char *artist , const char *title ,const char *path , char *fullname)
+{
+    strcpy ( fullname ,path );
+    
+    char *tmp  = strcat(fullname , "/" );
+    
+    tmp =  strcat( tmp ,artist  );
+    
+    tmp =strcat(tmp, "-");
+    
+    tmp = strcat(tmp , title );
+    
+    strcat(tmp , ".lrc");
+    
+    return fullname;
+}
 
 
 
@@ -43,14 +67,9 @@ void * lrcFchThread(void* lrcFchArg)
     SearchLyric sl;
     if(  sl.Search(artist,title) )
     {
-        string sp (savepath);
-        sp+="/";
-        sp+=artist;
-        sp+="-";
-        sp+=title;
-        sp+=".lrc";
-        
-        sl.Download( 0 ,sp.c_str() );
+	char fullname[128] ={ 0 };
+
+        sl.Download( 0 , GenerateLyricsName(artist ,title , savepath ,fullname ) );
     }
     else
     {
@@ -59,6 +78,29 @@ void * lrcFchThread(void* lrcFchArg)
         
     return 0;
 }
+
+bool FileExists(const char* filename)
+{
+    struct stat info;
+    int ret = -1;
+    
+    //get the file attributes
+    ret = stat(filename, &info);
+    if(ret == 0)
+    {
+        //stat() is able to get the file attributes,
+        //so the file obviously exists
+        return true;
+    }
+    else
+    {
+        //stat() is not able to get the file attributes,
+        //so the file obviously does not exist or
+        //more capabilities is required
+        return false;
+    }
+}
+
 
 
 void* addJobIsFileAudio(const char * file ,void *arg)
@@ -69,12 +111,21 @@ void* addJobIsFileAudio(const char * file ,void *arg)
     
     lrcFchArg->savepath = savepath;
     
-
+    
     if (getId3Info(file , lrcFchArg->artist,  lrcFchArg->title )    )
     {
-        //printf("job .. \n");
-        pool_add_job(lrcFchThread, (void*)lrcFchArg );
-        sleep(12);
+        char fullname[128] = {0 };
+        
+        GenerateLyricsName( lrcFchArg->artist , lrcFchArg->title , lrcFchArg->savepath , fullname );
+        
+        //if fullname is exist in file system. ignore to search and download the lyrics.
+        if ( ! FileExists(fullname ) )
+        {
+            printf("%u , audio's tag info : %s , %s \n" , pthread_self() ,lrcFchArg->artist , lrcFchArg ->title );
+            //printf("job .. \n");
+            pool_add_job(lrcFchThread, (void*)lrcFchArg );
+            //sleep(12);
+        }
     }
     
     return nullptr;
@@ -88,12 +139,12 @@ int main(int argc, const char * argv[]) {
     
     pool_destroy();
     
-    
+/*    
     while (1) {
         printf("~~~.");
         sleep(2);
     }
-    
+ */   
 
     
     return 0;

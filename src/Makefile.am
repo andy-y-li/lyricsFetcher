@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS=foreign
-COMPILE_FLAGS=-g -W0
+COMPILE_FLAGS=-g -W0 -DDEBUG 
 LIBS=-ltag
 LIBDIR=-L/usr/local/lib
 INCLUDES=-I/usr/local/include

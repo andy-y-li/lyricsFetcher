@@ -17,6 +17,11 @@
 
 #ifdef DEBUG
 #include <pthread.h>
+#else
+int pthread_self()
+{
+	return 0;
+}
 #endif
 
 /**
@@ -261,6 +266,7 @@ INT SearchLyric::Init()
     outS=socket(AF_INET,SOCK_STREAM,0);
     if (outS ==INVALID_SOCKET )
     {
+        printf("Can't bind local socket.\n");
         goto r;
     }
     
@@ -322,6 +328,7 @@ BOOL SearchLyric::_Search(const char *artist,const char *title)
         }
         else
         {
+            printf("Can't connect to server.\n");
             return FALSE;
         }
     }
