@@ -476,102 +476,111 @@ BOOL SearchLyric::Download(int idx,const char *savepath)
 
 BOOL SearchLyric::_DownloadLyric(char *id,char *ar,char*ti,const char *savepath)
 {
-    FILE * pFile;
-    pFile = fopen( savepath , ("w") );
-    if (pFile)
+    InitDownloadSocket();
+    
+    socketDownload=socket(AF_INET,SOCK_STREAM,0);
+    if (socketDownload==INVALID_SOCKET)
     {
-        InitDownloadSocket();
-        
-        socketDownload=socket(AF_INET,SOCK_STREAM,0);
-        if (socketDownload==INVALID_SOCKET)
+	printf("invalid socket \n");
+	return FALSE;
+    }
+    
+    if(SOCKET_ERROR==::connect(socketDownload,(sockaddr*)&addrDownload,sizeof(addrDownload)))
+    {
+        if (GetLastError()==10056)
+	{
+	    printf("socket already binded\n");
+	}
+	{
+	    printf("connect error : %d \n", GetLastError() );
             return FALSE;
-        
-        if(SOCKET_ERROR==::connect(socketDownload,(sockaddr*)&addrDownload,sizeof(addrDownload)))
+	}
+    }
+    
+    
+    string code;
+    CreateQianQianCode(id,ar,ti,code);
+    
+    static const  char *header=
+    "GET /dll/lyricsvr.dll?dl?Id=%s&Code=%s&ci=DFA9CA1B1B08DC38323AB6D936BEF0D2 HTTP/1.1\r\n\
+    Host: %s\r\n\
+    \r\n\0\0";
+    
+    size_t strLen=strlen(header)-6 + strlen(id) + code.length() + sizeof(StrServiceDownload);
+    char *sendStr=new char[strLen];
+    sprintf(sendStr,header,id,code.c_str(),StrServiceDownload);
+    
+    //send data
+    ssize_t send=0,totalsend=0;
+    for (;(send=::send(socketDownload,sendStr+totalsend,strLen-totalsend,0))>0;totalsend+=send);
+    
+    printf("thread %u : download command sended %s ,%s ,%s \n",pthread_self() ,id ,ar ,ti );
+    //printf("\n%s\n",sendStr);
+    bool bDownloaded = false ;
+    //recv data
+    char *buf = NULL;
+    const int RECV_BUF_LEN =2600;
+    buf=(char*)malloc(RECV_BUF_LEN);
+    if (buf)
+    {
+        ssize_t recv=0;
+        recv=::recv(socketDownload,buf,RECV_BUF_LEN,0);
+        if(recv>0)
         {
-            if (GetLastError()!=10056)
-                return FALSE;
-        }
-        
-        
-        string code;
-        CreateQianQianCode(id,ar,ti,code);
-        
-static const  char *header=
-"GET /dll/lyricsvr.dll?dl?Id=%s&Code=%s&ci=DFA9CA1B1B08DC38323AB6D936BEF0D2 HTTP/1.1\r\n\
-Host: %s\r\n\
-\r\n\0\0";
-        
-        size_t strLen=strlen(header)-6 + strlen(id) + code.length() + sizeof(StrServiceDownload);
-        char *sendStr=new char[strLen];
-        sprintf(sendStr,header,id,code.c_str(),StrServiceDownload);
-        
-        //send data
-        ssize_t send=0,totalsend=0;
-        for (;(send=::send(socketDownload,sendStr+totalsend,strLen-totalsend,0))>0;totalsend+=send);
-        
-        printf("thread %u : download command sended %s ,%s ,%s \n",pthread_self() ,id ,ar ,ti );
-        //printf("\n%s\n",sendStr);
-        
-        //recv data
-        char *buf = NULL;
-        const int RECV_BUF_LEN =2600;
-        buf=(char*)malloc(RECV_BUF_LEN);
-        if (buf)
-        {
-            ssize_t recv=0;
-            recv=::recv(socketDownload,buf,RECV_BUF_LEN,0);
-            if(recv>0)
+            int iContentLength=0;
+            const char constContentLength[] = "\r\nContent-Length: ";
+            const char constBreakLine[] = "\r\n\r\n";
+            
+            const char find1[]="HTTP/1.";
+            //1.1 or 1.0
+            const char find2[]=" 200 OK";
+            const int  find1Len = sizeof(find1)/sizeof(find1[0])-1;
+            const int find2Len =sizeof(find2)/sizeof(find2[0])-1;
+            if (strncmp(buf, find1, find1Len ) == 0 &&
+                strncmp(buf + find1Len + 1, find2, find2Len ) == 0
+                )
             {
-                int iContentLength=0;
-                const char constContentLength[] = "\r\nContent-Length: ";
-                const char constBreakLine[] = "\r\n\r\n";
+                ////find Content-Length and \r\n\r\n
+                char *contentLength = strstr(buf, constContentLength);
+                char *breakLine = strstr(buf, constBreakLine);
                 
-                const char find1[]="HTTP/1.";
-                //1.1 or 1.0
-                const char find2[]=" 200 OK";
-                const int  find1Len = sizeof(find1)/sizeof(find1[0])-1;
-                const int find2Len =sizeof(find2)/sizeof(find2[0])-1;
-                if (strncmp(buf, find1, find1Len ) == 0 &&
-                    strncmp(buf + find1Len + 1, find2, find2Len ) == 0
-                    )
+                if (contentLength)
                 {
-                    ////find Content-Length and \r\n\r\n
-                    char *contentLength = strstr(buf, constContentLength);
-                    char *breakLine = strstr(buf, constBreakLine);
+                    contentLength += sizeof(constContentLength)/sizeof(constContentLength[0]) -1;
                     
-                    if (contentLength)
+                    
+                    char *p = strchr(contentLength, '\r');
+                    
+                    char tmp [20] = {0};
+                    strncpy(tmp, contentLength , (int) (p - contentLength)) ;
+                    iContentLength = atoi(tmp);
+                    
+                    
+                    //make sure is lyrics content.
+                    //not the error xml content.
+                    if (breakLine)
                     {
-                        contentLength += sizeof(constContentLength)/sizeof(constContentLength[0]) -1;
-                        
-                        
-                        char *p = strchr(contentLength, '\r');
-                        
-                        char tmp [20] = {0};
-                        strncpy(tmp, contentLength , (int) (p - contentLength)) ;
-                        iContentLength = atoi(tmp);
-                        
-                        
-                        //make sure is lyrics content.
-                        //not the error xml content.
-                        if (breakLine)
+                        if (strstr(breakLine, "<?xml version=\"") &&
+                            strstr(breakLine, "encoding=")
+                            )
                         {
-                            if (strstr(breakLine, "<?xml version=\"") &&
-                                strstr(breakLine, "encoding=")
-                                )
+                            printf("thread %u : Search ID or Code error!\n",pthread_self());
+                            /**<?xml version="1.0" encoding="UTF-8" ?>
+                             *<result errmsg="Search ID or Code error!" errcode="32006"></result>
+                             */
+                        }
+                        else
+                        {
+                            breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
+                            
+                            int contentLengthRecv = (int)(buf + recv - breakLine);
+                            
+                            //write to file
+                            
+                            FILE * pFile;
+                            pFile = fopen( savepath , ("w") );
+                            if (pFile)
                             {
-                                printf("thread %u : Search ID or Code error!\n",pthread_self());
-                                /**<?xml version="1.0" encoding="UTF-8" ?>
-                                 *<result errmsg="Search ID or Code error!" errcode="32006"></result>
-                                 */
-                            }
-                            else
-                            {
-                                breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
-                                
-                                int contentLengthRecv = (int)(buf + recv - breakLine);
-                                
-                                //write to file
-                                
                                 fwrite( breakLine , sizeof(buf[0]) ,  contentLengthRecv ,pFile);
                                 //printf("%u:%s",pthread_self(),breakLine);
                                 
@@ -585,25 +594,47 @@ Host: %s\r\n\
                                     fwrite( buf  , sizeof(buf[0]) ,  recv , pFile );
                                 }
                                 
-                                fclose(pFile);
                                 printf("thread %u: %d bytes saved to :%s \n",pthread_self(), iContentLength ,savepath);
                                 
+                                bDownloaded = true ;
                                 
+                                fclose(pFile);
                             }
+                            else
+                            {
+                                printf("%u : Unable to open file %s \n",pthread_self(),savepath);
+                            }
+                            
+                            
+                            
                         }
-
                     }
+		    else
+		    {
+			printf("%u : http error ,haven't find \"\r\n\r\n\" \n",pthread_self());
+		    }
                 }
+		else
+		{
+		    printf("%u : http error, haven't find \"Content-Length\"\n",pthread_self());
+		}
             }
-
-            free(buf);
+	    else
+	    {
+		printf("%u : http error.\n",pthread_self());
+	    }
         }
+	else
+	{
+	    printf ("%u : recv nothing from server.\n ",pthread_self() );
+	}
+        
+        free(buf);
     }
     else
     {
-        printf("Unable to open file %s \n",savepath);
+	printf("%u :  malloc error \n ",pthread_self());
     }
     
-    
-    return TRUE;
+    return bDownloaded;
 }

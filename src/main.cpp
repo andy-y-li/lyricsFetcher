@@ -114,15 +114,21 @@ void* addJobIsFileAudio(const char * file ,void *arg)
     
     if (getId3Info(file , lrcFchArg->artist,  lrcFchArg->title )    )
     {
+	printf("%u , audio's tag info : %s , %s." , pthread_self() ,lrcFchArg->artist , lrcFchArg ->title );
+
+
         char fullname[128] = {0 };
         
         GenerateLyricsName( lrcFchArg->artist , lrcFchArg->title , lrcFchArg->savepath , fullname );
         
         //if fullname is exist in file system. ignore to search and download the lyrics.
-        if ( ! FileExists(fullname ) )
+        if (  FileExists(fullname ) )
+	{
+           printf("Lyrics file exists. Skip to fetch.\n");
+	}
+	else
         {
-            printf("%u , audio's tag info : %s , %s \n" , pthread_self() ,lrcFchArg->artist , lrcFchArg ->title );
-            //printf("job .. \n");
+	    printf("\n");
             pool_add_job(lrcFchThread, (void*)lrcFchArg );
             //sleep(12);
         }
