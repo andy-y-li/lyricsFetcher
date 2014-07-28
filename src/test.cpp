@@ -55,6 +55,12 @@ void test()
     
     
     
+    const char test3[]="Michael Jackson";
+    result =  str2UnicodeCode(test3,strlen(test3) );
+    assert(result.compare("4D00690063006800610065006C004A00610063006B0073006F006E00") == 0 );
+    //suc "4D00690063006800610065006C00 4A006100   63006B0073006F006E00"
+    //err "4D00690063006800610065006C00 004A006100 63006B0073006F006E00"
+    
    // char test3[] = "刀剑如梦";
    // result =  str2UnicodeCode(test3,sizeof(test3)/sizeof(test3[0]) );
     
@@ -105,7 +111,7 @@ int main(int argc, const char * argv[]) {
     //testFunctionInTaglib();
 
 
-    //test();
+    test(); return 0;
     
     //testIterFiles();
     

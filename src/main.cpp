@@ -30,9 +30,12 @@ int skiped=0;
  */
 char *GenerateLyricsName(const char *artist , const char *title ,const char *path , char *fullname)
 {
+    char *tmp ;
+
     strcpy ( fullname ,path );
     
-    char *tmp  = strcat(fullname , "/" );
+    if(path[strlen(path)]!='/')
+	tmp = strcat(fullname , "/" );
     
     tmp =  strcat( tmp ,artist  );
     
@@ -93,6 +96,7 @@ void * lrcFchThread(void* lrcFchArg)
     if(bRet == false )
         downloadFailed++;
 
+    free(s);
 
     return 0;
 }
@@ -149,7 +153,6 @@ void* addJobIsFileAudio(const char * file ,void *arg)
             //printf("\n");
             pool_add_job(lrcFchThread, (void*)lrcFchArg );
             runningJobs++;
-            //sleep(12);
         }
     }
     
@@ -187,7 +190,7 @@ int main(int argc, const char * argv[])
     //const char * targetFolder = argv[2];
     _savepath =(char*)argv[2];
     
-    pool_init(4);
+    pool_init(8);
     
     IterFiles(string (sourceFolder ), string (sourceFolder ), addJobIsFileAudio, nullptr );
     
@@ -195,22 +198,21 @@ int main(int argc, const char * argv[])
     
     while (runningJobs > 0)
     {
-        //printf("~~.");
-        sleep(2);
+        sleep(1);
     }
     
     
     pool_destroy();
  
 
-    printf("Summary: ~~~~~~~~~~~~~~~~");
-    printf("audio source directory: %s\n",argv[1]);
-    printf("target lyrics directory: %s",argv[2]);
+    printf("Summary: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    printf(" :audio source directory: %s\n",argv[1]);
+    printf(" :target lyrics directory: %s\n",argv[2]);
     printf("%d Audio File with tag Finded.\n",tagFileFinded);
+    if(skiped>0)
     printf("%d Audio File is skipped because there is a lyrics file in the target directory.\n",skiped);
-    printf("And %d failed to download.\n",downloadFailed);
-    printf("%d files downloaded complete.\n",totalDownload-downloadFailed);
-    printf("End: ~~~~~~~~~~~~~~~~");
+    printf("%d failed to download.\n",downloadFailed);
+    printf("%d files downloaded.\n",totalDownload-downloadFailed);
 
     return 0;
 }
