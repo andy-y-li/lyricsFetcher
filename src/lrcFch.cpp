@@ -302,6 +302,7 @@ BOOL SearchLyric::MakeSureSocketStartUp()
 //的UNICODE编码
 BOOL SearchLyric::_Search(const char *artist,const char *title)
 {
+    //printf( "thread:%u:begin to _search:%s,%s\n",pthread_self() ,artist ,title );
     if(!Init())
         return FALSE;
     
@@ -310,6 +311,7 @@ BOOL SearchLyric::_Search(const char *artist,const char *title)
         outS=socket(AF_INET,SOCK_STREAM,0);
         if (!outS)
         {
+	    printf("can not init socket\n");
             socketInit=FALSE;
             return FALSE;
         }
@@ -320,7 +322,6 @@ BOOL SearchLyric::_Search(const char *artist,const char *title)
     int error=::connect(outS,(sockaddr*)&sAddr,sizeof(sAddr));
     if(error==SOCKET_ERROR)
     {
-        
         //DWORD errorNumber=GetLastError();
         int errorNumber = errno;
         if (errorNumber==10056)
@@ -381,11 +382,16 @@ Host: %s\r\n\
 
 BOOL SearchLyric::_ParseResult()
 {
+    //printf("thread %u:parse.\n",pthread_self() );
     int lineIndex = 0;
     auto index=strRecv.find("<result>");
     if(index>= strRecv.npos)
+    {
+	printf("can not find <result> on what server returned.\n");
         return FALSE;
-    
+    }
+
+
     strRecv.erase(0,index);
     index=0;
     
@@ -397,6 +403,7 @@ BOOL SearchLyric::_ParseResult()
         auto last=strRecv.find("</lrc>",index);
         if(index == 0 || last == string::npos)
         {
+	    printf("can not find <lrc>> on what server returned.\n");
             break;
         }
         else
@@ -481,20 +488,21 @@ BOOL SearchLyric::_DownloadLyric(char *id,char *ar,char*ti,const char *savepath)
     socketDownload=socket(AF_INET,SOCK_STREAM,0);
     if (socketDownload==INVALID_SOCKET)
     {
-	printf("invalid socket \n");
-	return FALSE;
+        printf("invalid socket \n");
+        return FALSE;
     }
     
     if(SOCKET_ERROR==::connect(socketDownload,(sockaddr*)&addrDownload,sizeof(addrDownload)))
     {
         if (GetLastError()==10056)
-	{
-	    printf("socket already binded\n");
-	}
-	{
-	    printf("connect error : %d \n", GetLastError() );
+        {
+            printf("socket already binded\n");
+        }
+        else
+        {
+            printf("connect error : %d \n", GetLastError() );
             return FALSE;
-	}
+        }
     }
     
     
@@ -502,9 +510,10 @@ BOOL SearchLyric::_DownloadLyric(char *id,char *ar,char*ti,const char *savepath)
     CreateQianQianCode(id,ar,ti,code);
     
     static const  char *header=
-    "GET /dll/lyricsvr.dll?dl?Id=%s&Code=%s&ci=DFA9CA1B1B08DC38323AB6D936BEF0D2 HTTP/1.1\r\n\
-    Host: %s\r\n\
-    \r\n\0\0";
+"GET /dll/lyricsvr.dll?dl?Id=%s&Code=%s&ci=DFA9CA1B1B08DC38323AB6D936BEF0D2 HTTP/1.1\r\n\
+Connection: Keep-Alive\r\n\
+Host: %s\r\n\
+\r\n\0\0";
     
     size_t strLen=strlen(header)-6 + strlen(id) + code.length() + sizeof(StrServiceDownload);
     char *sendStr=new char[strLen];

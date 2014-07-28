@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 #include <stdlib.h>
@@ -17,6 +17,12 @@
 #include <assert.h>
 #endif
 
+
+int runningJobs = 0;
+int totalDownload = 0;
+int downloadFailed = 0;
+int tagFileFinded=0;
+int skiped=0;
 
 /**
  * brief "artist" , "title" , "/a/b"  to "/a/b/artist-title.lrc"
@@ -57,25 +63,37 @@ void lrcFchSInit(lrcFchS *s, const char *a , const char *t, const char *p)
     s->savepath=p;
 }
 
+
+
 void * lrcFchThread(void* lrcFchArg)
 {
+    bool bRet = false ;
+
     lrcFchS *s = (lrcFchS*)lrcFchArg ;
     const char *artist = s->artist;
     const char *title = s->title;
     const char *savepath= s->savepath;
     
+    printf("thread %u: beginning to search:%s , %s.\n",pthread_self() ,artist , title );
     SearchLyric sl;
     if(  sl.Search(artist,title) )
     {
-	char fullname[128] ={ 0 };
-
-        sl.Download( 0 , GenerateLyricsName(artist ,title , savepath ,fullname ) );
+        char fullname[128] ={ 0 };
+        
+        bRet = sl.Download( 0 , GenerateLyricsName(artist ,title , savepath ,fullname ) );
     }
     else
     {
         printf("thread %u: search failed.\n",pthread_self() );
     }
-        
+    
+    runningJobs--;
+    totalDownload++;
+
+    if(bRet == false )
+        downloadFailed++;
+
+
     return 0;
 }
 
@@ -102,34 +120,35 @@ bool FileExists(const char* filename)
 }
 
 
-
+char *_savepath = 0;
 void* addJobIsFileAudio(const char * file ,void *arg)
 {
-    char *savepath= "/Users/shijunhe/lyrics";
-    
     lrcFchS * lrcFchArg = (lrcFchS*)malloc(sizeof(lrcFchS)) ;
     
-    lrcFchArg->savepath = savepath;
+    lrcFchArg->savepath = _savepath;
     
     
     if (getId3Info(file , lrcFchArg->artist,  lrcFchArg->title )    )
     {
-	printf("%u , audio's tag info : %s , %s." , pthread_self() ,lrcFchArg->artist , lrcFchArg ->title );
-
-
+        //printf("%u , audio's tag info : %s , %s." , pthread_self() ,lrcFchArg->artist , lrcFchArg ->title );
+        
+        tagFileFinded++;
+        
         char fullname[128] = {0 };
         
         GenerateLyricsName( lrcFchArg->artist , lrcFchArg->title , lrcFchArg->savepath , fullname );
         
         //if fullname is exist in file system. ignore to search and download the lyrics.
         if (  FileExists(fullname ) )
-	{
-           printf("Lyrics file exists. Skip to fetch.\n");
-	}
-	else
         {
-	    printf("\n");
+            skiped++;
+            //printf(" ~~~~~~~Lyrics file exists. Skip to fetch.~~~~~~\n");
+        }
+        else
+        {
+            //printf("\n");
             pool_add_job(lrcFchThread, (void*)lrcFchArg );
+            runningJobs++;
             //sleep(12);
         }
     }
@@ -137,22 +156,64 @@ void* addJobIsFileAudio(const char * file ,void *arg)
     return nullptr;
 }
 
-int main(int argc, const char * argv[]) {
 
+
+
+
+void usage(const char *exec)
+{
+    int len = strlen (exec );
+    
+    char *ext =(char*)exec + len ;
+    
+    for (; ext[-1] != '/' ; ext -= 1 )
+        ;
+    
+    
+    printf("This is a program to download music track's lyrics from internet.\n");
+    printf("usage: %s [music folder] [download folder] \n", ext );
+}
+
+
+int main(int argc, const char * argv[])
+{
+    if (argc != 3 )
+    {
+        usage( argv[0] );
+        return 0;
+    }
+    
+    const char * sourceFolder = argv[1];
+    //const char * targetFolder = argv[2];
+    _savepath =(char*)argv[2];
+    
     pool_init(4);
     
-    IterFiles(string ("/Users/shijunhe/Music/Music/abc"), string ("/Users/shijunhe/Music/Music/abc"), addJobIsFileAudio, nullptr );
+    IterFiles(string (sourceFolder ), string (sourceFolder ), addJobIsFileAudio, nullptr );
     
-    pool_destroy();
     
-/*    
-    while (1) {
-        printf("~~~.");
+    
+    while (runningJobs > 0)
+    {
+        //printf("~~.");
         sleep(2);
     }
- */   
-
     
+    
+    pool_destroy();
+ 
+
+    printf("Summary: ~~~~~~~~~~~~~~~~");
+    printf("audio source directory: %s\n",argv[1]);
+    printf("target lyrics directory: %s",argv[2]);
+    printf("%d Audio File with tag Finded.\n",tagFileFinded);
+    printf("%d Audio File is skipped because there is a lyrics file in the target directory.\n",skiped);
+    printf("And %d failed to download.\n",downloadFailed);
+    printf("%d files downloaded complete.\n",totalDownload-downloadFailed);
+    printf("End: ~~~~~~~~~~~~~~~~");
+
     return 0;
 }
+
+
 
