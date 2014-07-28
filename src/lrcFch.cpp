@@ -258,7 +258,7 @@ INT SearchLyric::Init()
     }
     else
     {
-        printf("thread%u:Can not find server %s\n",pthread_self(),StrServiceDianXin);
+        printf("thread %u:Can not find server %s\n",pthread_self(),StrServiceDianXin);
         goto r;
     }
     
@@ -266,7 +266,7 @@ INT SearchLyric::Init()
     outS=socket(AF_INET,SOCK_STREAM,0);
     if (outS ==INVALID_SOCKET )
     {
-        printf("thread%u:Can't bind local socket.\n",pthread_self());
+        printf("thread %u:Can't bind local socket.\n",pthread_self());
         goto r;
     }
     
@@ -311,7 +311,7 @@ BOOL SearchLyric::_Search(const char *artist,const char *title)
         outS=socket(AF_INET,SOCK_STREAM,0);
         if (!outS)
         {
-	    printf("thread%u:can not init socket\n",pthread_self());
+	    printf("thread %u:can not init socket\n",pthread_self());
             socketInit=FALSE;
             return FALSE;
         }
@@ -387,7 +387,7 @@ BOOL SearchLyric::_ParseResult()
     auto index=strRecv.find("<result>");
     if(index>= strRecv.npos)
     {
-	printf("thread%u:can not find <result> on what server returned.\n",pthread_self());
+	printf("thread %u:can not find <result> on what server returned.\n",pthread_self());
         return FALSE;
     }
 
@@ -403,7 +403,7 @@ BOOL SearchLyric::_ParseResult()
         auto last=strRecv.find("</lrc>",index);
         if(index == 0 || last == string::npos)
         {
-	    printf("thread%u:can not find <lrc>> on what server returned.\n",pthread_self());
+	    printf("thread %u:can not find <lrc>> on what server returned.\n",pthread_self());
             break;
         }
         else
@@ -488,7 +488,7 @@ BOOL SearchLyric::_DownloadLyric(char *id,char *ar,char*ti,const char *savepath)
     socketDownload=socket(AF_INET,SOCK_STREAM,0);
     if (socketDownload==INVALID_SOCKET)
     {
-        printf("thread%u:invalid socket \n",pthread_self());
+        printf("thread %u:invalid socket \n",pthread_self());
         return FALSE;
     }
     
@@ -496,11 +496,11 @@ BOOL SearchLyric::_DownloadLyric(char *id,char *ar,char*ti,const char *savepath)
     {
         if (GetLastError()==10056)
         {
-            printf("thread%u:socket already binded\n",pthread_self());
+            printf("thread %u:socket already binded\n",pthread_self());
         }
         else
         {
-            printf("thread%u:connect error : %d \n", GetLastError() );
+            printf("thread %u:connect error : %d \n", GetLastError() );
             return FALSE;
         }
     }
