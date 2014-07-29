@@ -11,7 +11,7 @@
 #define TEST 1
 #include <assert.h>
 #include "stringConv.h"
-#include "lrcFch.h"
+#include "lrcFch_qianqian.h"
 #include "stringConv.h"
 #include <arpa/inet.h>
 
@@ -61,8 +61,8 @@ void test()
     //suc "4D00690063006800610065006C00 4A006100   63006B0073006F006E00"
     //err "4D00690063006800610065006C00 004A006100 63006B0073006F006E00"
     
-   // char test3[] = "刀剑如梦";
-   // result =  str2UnicodeCode(test3,sizeof(test3)/sizeof(test3[0]) );
+  //  char test3[] = "刀剑如梦";
+    //result =  str2UnicodeCode(test3,sizeof(test3)/sizeof(test3[0]) );
     
 
     

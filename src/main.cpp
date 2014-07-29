@@ -3,7 +3,7 @@
  */
 
 #include <stdlib.h>
-#include "lrcFch.h"
+#include "lrcFch_qianqian.h"
 #include <pthread.h>
 #include "threadpool.h"
 #include "fileCtrl.h"
@@ -32,10 +32,11 @@ char *GenerateLyricsName(const char *artist , const char *title ,const char *pat
 {
     char *tmp ;
 
-    strcpy ( fullname ,path );
+    tmp = strcpy ( fullname ,path );
     
-    if(path[strlen(path)]!='/')
-	tmp = strcat(fullname , "/" );
+    int len = strlen(path) -1 ;
+    if(path[len] != '/')
+        tmp = strcat(fullname , "/" );
     
     tmp =  strcat( tmp ,artist  );
     
@@ -77,7 +78,7 @@ void * lrcFchThread(void* lrcFchArg)
     const char *title = s->title;
     const char *savepath= s->savepath;
     
-    printf("thread %u: beginning to search: %s , %s.\n",pthread_self() ,artist , title );
+    //printf("thread %u: beginning to search: %s , %s.\n",pthread_self() ,artist , title );
     SearchLyric sl;
     if(  sl.Search(artist,title) )
     {
@@ -87,7 +88,7 @@ void * lrcFchThread(void* lrcFchArg)
     }
     else
     {
-        printf("thread %u: search failed.\n",pthread_self() );
+        printf("\033[;31msearch failed\033[0m: %s, %s \n",artist ,title  );
     }
     
     runningJobs--;
@@ -146,7 +147,7 @@ void* addJobIsFileAudio(const char * file ,void *arg)
         if (  FileExists(fullname ) )
         {
             skiped++;
-            //printf(" ~~~~~~~Lyrics file exists. Skip to fetch.~~~~~~\n");
+            printf("file exists,skip. %s\n",fullname);
         }
         else
         {
@@ -207,13 +208,13 @@ int main(int argc, const char * argv[])
     printf("\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nSummary:\n");
     printf(": audio source directory: \033[;32m%s\033[0m\n",argv[1]);
     printf(": target lyrics directory: \033[;32m%s\033[0m\n\n",argv[2]);
-    printf("\033[;32m%d\033[0m Audio File with tag Finded.\n",tagFileFinded);
+    printf("\033[;32m%-4d\033[0m Audio File with tag Finded.\n",tagFileFinded);
     if(skiped>0)
-	printf("\033[;32m%d\033[0m Audio File is skipped (there is a lyrics file in the target directory).\n",skiped);
+	printf("\033[;32m%-4d\033[0m Audio File is skipped.\n",skiped);
 
     if(downloadFailed>0)
-	printf("\033[;32m%d\033[0m failed to download.\n",downloadFailed);
-    printf("\033[;32m%d\033[0m files downloaded.\n",totalDownload-downloadFailed);
+	printf("\033[;32m%-4d\033[0m failed to download.\n",downloadFailed);
+    printf("\033[;32m%-4d\033[0m files downloaded.\n\n",totalDownload-downloadFailed);
     return 0;
 }
 

@@ -255,7 +255,8 @@ INT SearchLyric::Init()
     }
     else
     {
-        printf("thread %u:Can not find server %s\n",pthread_self(),StrServiceDianXin);
+	 
+        printf("\033[;31mCan not find server %s\033[0m\n",StrServiceDianXin);
         goto r;
     }
     
@@ -263,7 +264,7 @@ INT SearchLyric::Init()
     outS=socket(AF_INET,SOCK_STREAM,0);
     if (outS ==INVALID_SOCKET )
     {
-        printf("thread %u:Can't bind local socket.\n",pthread_self());
+        printf("\033[;31mCan't bind local socket.\n\033[0m");
         goto r;
     }
     
@@ -388,7 +389,7 @@ BOOL SearchLyric::_ParseResult()
     auto index=strRecv.find("<result>");
     if(index>= strRecv.npos)
     {
-	printf("thread %u:can not find <result> on what server returned.\n",pthread_self());
+	printf("\033[;31mcan not find <result> on what server returned.\n\033[0m",pthread_self());
         return FALSE;
     }
 
@@ -427,7 +428,7 @@ BOOL SearchLyric::_ParseResult()
             
 
 
-            printf("%u %d : %s ,%s , %s \n",pthread_self(),lineIndex,r[0].c_str(),r[1].c_str(), r[2].c_str());
+            //printf("%u %d : %s ,%s , %s \n",pthread_self(),lineIndex,r[0].c_str(),r[1].c_str(), r[2].c_str());
             
 	//try to find the best "lyrics title" matchs the search title.
 	//save it.
@@ -435,7 +436,7 @@ BOOL SearchLyric::_ParseResult()
 	   {
 	       //we finded it.
 	       idxBestLrc = lineIndex ;
-	       printf("best index %d\n", idxBestLrc );
+	       //printf("best index %d\n", idxBestLrc );
 	       break;
 	   }
 
@@ -570,7 +571,7 @@ Host: %s\r\n\
     ssize_t send=0,totalsend=0;
     for (;(send=::send(socketDownload,sendStr+totalsend,strLen-totalsend,0))>0;totalsend+=send);
     
-    printf("thread %u : download command sended %s ,%s ,%s \n",pthread_self() ,id ,ar ,ti );
+    //printf("thread %u : download command sended %s ,%s ,%s \n",pthread_self() ,id ,ar ,ti );
     //printf("\n%s\n",sendStr);
     bool bDownloaded = false ;
     //recv data
@@ -620,7 +621,7 @@ Host: %s\r\n\
                             strstr(breakLine, "encoding=")
                             )
                         {
-                            printf("thread %u : Search ID or Code error!\n",pthread_self());
+                            printf("\033[;31mdownload id or code error.\033[0m%s,%s\n",_artist ,_title );
                             /**<?xml version="1.0" encoding="UTF-8" ?>
                              *<result errmsg="Search ID or Code error!" errcode="32006"></result>
                              */
@@ -650,7 +651,7 @@ Host: %s\r\n\
                                     fwrite( buf  , sizeof(buf[0]) ,  recv , pFile );
                                 }
                                 
-                                printf("thread %u: %d bytes saved to :%s \n",pthread_self(), iContentLength ,savepath);
+                                printf("%d bytes saved to :\033[;32m%s\033[0m\n", iContentLength ,savepath);
                                 
                                 bDownloaded = true ;
                                 
