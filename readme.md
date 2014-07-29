@@ -1,5 +1,11 @@
 # lyricsFetcher is a command tool to fetch lyrics from qianqian server
 
+
+## requirement librarys
+taglib : to grab the audio's id3v2 or id3v1 info.a## requirement librarys
+  [taglib](http://taglib.github.io) : to grab the audio's id3v2 or id3v1 info.
+
+
 ## ** Build instructions:**
 1. cd /xxx/src
 2. ./configure
