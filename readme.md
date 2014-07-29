@@ -2,7 +2,6 @@
   The Create Secret Code functon is copied from a foobar2k's python plug-in.(CreateQianQianCode)
 
 ## requirement librarys
-taglib : to grab the audio's id3v2 or id3v1 info.a## requirement librarys
   [taglib](http://taglib.github.io) : to grab the audio's id3v2 or id3v1 info.
 
 
