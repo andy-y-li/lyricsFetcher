@@ -1,7 +1,11 @@
 # lyricsFetcher is a command tool to fetch lyrics from qianqian server
 
 ## ** Build instructions:**
-xxxxxxxxxxxxxxxxxx
+1. cd /xxx/src
+2. ./configure
+3. make
+
+
 
 ##  Usage
 This is a program to download music track's lyrics from internet.
