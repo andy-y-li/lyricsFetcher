@@ -104,27 +104,35 @@ int pool_destroy(void)
 /*Every thread call this function*/
 void * routine(void *arg)
 {
-#ifdef DEBUG
+    /*
+#ifdef DEBUG==3
     printf("start thread %u\n",pthread_self());
 #endif
+*/
     while(1){
         pthread_mutex_lock(&(pool->pool_lock));
         while(pool->size==0 && !pool->destroy){
-#ifdef DEBUG
+/*
+#ifdef DEBUG=3
             printf("thread %u is waiting\n",pthread_self());
 #endif
+*/
             pthread_cond_wait(&(pool->job_ready),&(pool->pool_lock));
         }
         if(pool->destroy){
             pthread_mutex_unlock(&(pool->pool_lock));
-#ifdef DEBUG
+/*
+#ifdef DEBUG=3
             printf("thread %u will exit\n",pthread_self());
 #endif
+*/
             pthread_exit(NULL);
         }
-#ifdef DEBUG
+/*
+#ifdef DEBUG=3
         printf("thread %u is starting to work\n",pthread_self());
 #endif
+*/
         /*For debug*/
         assert(pool->size!=0);
         assert(pool->jobs!=NULL);

@@ -89,9 +89,6 @@ void CreateQianQianCode(char *id,char *ar,char*ti,std::string &code)
     std::string arti(ar);
     arti+=ti;
     
-    //printf("%p%s",arti.c_str(),arti.c_str());
-    
-    
     int length=arti.length();
     int *song=new int[length];
     for (int i=0;i<length;++i)
@@ -434,7 +431,7 @@ BOOL SearchLyric::_ParseResult()
             
 	//try to find the best "lyrics title" matchs the search title.
 	//save it.
-	   if (strcmp (  r[ lineIndex*3 + 2].c_str(), _title ) == 0 )
+	   if (strcmp (  r[2].c_str(), _title ) == 0 )
 	   {
 	       //we finded it.
 	       idxBestLrc = lineIndex ;

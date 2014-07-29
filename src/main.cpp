@@ -77,7 +77,7 @@ void * lrcFchThread(void* lrcFchArg)
     const char *title = s->title;
     const char *savepath= s->savepath;
     
-    printf("thread %u: beginning to search:%s , %s.\n",pthread_self() ,artist , title );
+    printf("thread %u: beginning to search: %s , %s.\n",pthread_self() ,artist , title );
     SearchLyric sl;
     if(  sl.Search(artist,title) )
     {
@@ -204,18 +204,16 @@ int main(int argc, const char * argv[])
     
     pool_destroy();
  
-
-    printf("\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nSummary:");
-    printf(" :audio source directory: %s\n",argv[1]);
-    printf(" :target lyrics directory: %s\n\n",argv[2]);
-    printf("%d Audio File with tag Finded.\n",tagFileFinded);
+    printf("\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nSummary:\n");
+    printf(": audio source directory: \033[;32m%s\033[0m\n",argv[1]);
+    printf(": target lyrics directory: \033[;32m%s\033[0m\n\n",argv[2]);
+    printf("\033[;32m%d\033[0m Audio File with tag Finded.\n",tagFileFinded);
     if(skiped>0)
-	printf("%d Audio File is skipped (there is a lyrics file in the target directory).\n",skiped);
+	printf("\033[;32m%d\033[0m Audio File is skipped (there is a lyrics file in the target directory).\n",skiped);
 
     if(downloadFailed>0)
-	printf("%d failed to download.\n",downloadFailed);
-    printf("%d files downloaded.\n",totalDownload-downloadFailed);
-
+	printf("\033[;32m%d\033[0m failed to download.\n",downloadFailed);
+    printf("\033[;32m%d\033[0m files downloaded.\n",totalDownload-downloadFailed);
     return 0;
 }
 
