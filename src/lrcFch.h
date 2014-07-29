@@ -46,6 +46,9 @@ typedef unsigned int UINT;
 #define _T(x) L##x
 #endif
 
+void CreateQianQianCode(char *id,char *ar,char*ti,std::string &code);
+
+
 using namespace std;
 class SearchLyric
 {
@@ -75,15 +78,18 @@ private:
 public:
     /**download and save lyrics file to the path.
      */
+    
+    BOOL Download(const char *savepath);
+    
+private:
     BOOL Download(int idx,const char *savepath);
-    
-private:
-    //BOOL _Download(int idx,const char *savepath);
     BOOL _DownloadLyric(char *id,char *ar,char*ti,const char *savepath);
-    //BOOL _SaveLyricToFile(const char *filepath);
-    
     
 private:
+    const char *_artist;
+    const char *_title;
+    int idxBestLrc;
+
     BOOL MakeSureSocketStartUp();
     INT Init();
     INT InitDownloadSocket();

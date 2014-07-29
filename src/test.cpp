@@ -105,6 +105,38 @@ void * testFunctionInTaglib2(const char *file , void *arg)
 }
 
 
+
+
+
+
+
+
+void testCreateQianQianCode()
+{
+//CreateQianQianCode( );
+
+
+
+	
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 //argv is utf-8 format code string.
 int main(int argc, const char * argv[]) {
     
@@ -124,22 +156,8 @@ int main(int argc, const char * argv[]) {
     
         if(s.Search(artist,title) )
         {
-        
-        printf("Now , choose a index to download please : ");
-        int index=-1;
-        char a = getchar();
-        
-        //index = getw(stdin);
-        
-        sprintf( (char*)&index,"%c", a);
-        index = 1;
-        
-        printf("You choosed %d\n",index);
-        
-        
-        
         char *saveFile = "/Users/shijunhe/Download2/a.lrc";
-        s.Download(index-1,saveFile);
+        s.Download(saveFile);
     
         }
     return 0;

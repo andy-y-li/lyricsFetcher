@@ -189,7 +189,7 @@ const char  StrServiceDownload[]="ttlrcct2.qianqian.com";
 
 
 
-SearchLyric::SearchLyric():socketInit(SOCKET_NOT_INIT),downloadSocketInit(FALSE)
+SearchLyric::SearchLyric():socketInit(SOCKET_NOT_INIT),downloadSocketInit(FALSE),idxBestLrc(0)
 {
     
 }
@@ -377,6 +377,10 @@ Host: %s\r\n\
     free(buf);
     closesocket(outS);
     
+
+   _artist = artist;
+   _title = title;
+
     return 1;
 }
 
@@ -403,7 +407,7 @@ BOOL SearchLyric::_ParseResult()
         auto last=strRecv.find("</lrc>",index);
         if(index == 0 || last == string::npos)
         {
-	    printf("thread %u:can not find <lrc>> on what server returned.\n",pthread_self());
+	    //printf("thread %u:can not find <lrc> on what server returned.\n",pthread_self());
             break;
         }
         else
@@ -411,6 +415,7 @@ BOOL SearchLyric::_ParseResult()
             int findEnd;
             static const char * strToFind[]={"id=\"","artist=\"","title=\""};
             string r[3];
+	    
             for (int i=0;i<3;++i)
             {
                 index=strRecv.find(strToFind[i],index);
@@ -424,14 +429,30 @@ BOOL SearchLyric::_ParseResult()
             }
             
 
+
             printf("%u %d : %s ,%s , %s \n",pthread_self(),lineIndex,r[0].c_str(),r[1].c_str(), r[2].c_str());
             
+	//try to find the best "lyrics title" matchs the search title.
+	//save it.
+	   if (strcmp (  r[ lineIndex*3 + 2].c_str(), _title ) == 0 )
+	   {
+	       //we finded it.
+	       idxBestLrc = lineIndex ;
+	       printf("best index %d\n", idxBestLrc );
+	       break;
+	   }
+
+
             lineIndex++;
         }
         
         
     }//while(1)
     
+
+
+
+
     return vecLrcLines.size();
 }
 
@@ -471,10 +492,39 @@ BOOL SearchLyric::_SaveLyricToFile(const char *filepath)
 }
 */
 
+BOOL SearchLyric::Download(const char *savepath)
+{
+    return Download ( idxBestLrc , savepath );
+}
+
+
 BOOL SearchLyric::Download(int idx,const char *savepath)
 {
     assert(idx+1 <= vecLrcLines.size() && idx >=0 );
     
+
+/*//test
+   int c = vecLrcLines.size();
+   for (int i=0; i< c; ++i )
+   {
+
+    string code;
+    CreateQianQianCode((char*)vecLrcLines[i*3].c_str(),
+                         (char*)vecLrcLines[i*3+1].c_str(),
+                         (char*)vecLrcLines[i*3+2].c_str(),
+code);
+
+    printf("%s\n",code.c_str() );
+   }
+//end
+*/
+
+
+
+
+
+
+
     return _DownloadLyric((char*)vecLrcLines[idx*3].c_str(),
                          (char*)vecLrcLines[idx*3+1].c_str(),
                          (char*)vecLrcLines[idx*3+2].c_str(),

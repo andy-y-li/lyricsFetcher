@@ -83,7 +83,7 @@ void * lrcFchThread(void* lrcFchArg)
     {
         char fullname[128] ={ 0 };
         
-        bRet = sl.Download( 0 , GenerateLyricsName(artist ,title , savepath ,fullname ) );
+        bRet = sl.Download(GenerateLyricsName(artist ,title , savepath ,fullname ) );
     }
     else
     {
@@ -205,13 +205,15 @@ int main(int argc, const char * argv[])
     pool_destroy();
  
 
-    printf("Summary: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    printf("\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nSummary:");
     printf(" :audio source directory: %s\n",argv[1]);
-    printf(" :target lyrics directory: %s\n",argv[2]);
+    printf(" :target lyrics directory: %s\n\n",argv[2]);
     printf("%d Audio File with tag Finded.\n",tagFileFinded);
     if(skiped>0)
-    printf("%d Audio File is skipped because there is a lyrics file in the target directory.\n",skiped);
-    printf("%d failed to download.\n",downloadFailed);
+	printf("%d Audio File is skipped (there is a lyrics file in the target directory).\n",skiped);
+
+    if(downloadFailed>0)
+	printf("%d failed to download.\n",downloadFailed);
     printf("%d files downloaded.\n",totalDownload-downloadFailed);
 
     return 0;
