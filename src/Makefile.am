@@ -1,13 +1,17 @@
 AUTOMAKE_OPTIONS=foreign
 COMPILE_FLAGS=-g -DDEBUG 
-LIBS=-ltag
 LIBDIR=-L/usr/local/lib
-INCLUDES=-I/usr/local/include
-MYFLAGS=$(COMPILE_FLAGS) $(LIBS) $(INCLUDES) $(LIBDIR)
+MYINCLUDES=-I/usr/local/include
+MYFLAGS=$(COMPILE_FLAGS)  $(MYINCLUDES) $(LIBDIR)
 CFLAGS= $(MYFLAGS)
 CXXFLAGS=$(MYFLAGS)
 CPPFLAGS=$(MYFLAGS)
 
-bin_PROGRAMS=lyricFetcher test
-lyricFetcher_SOURCES=fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h main.cpp stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp
-test_SOURCES=test.cpp fileCtrl.cpp fileCtrl.h lrcFch.cpp lrcFch.h stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp
+bin_PROGRAMS=lyricsFetcher test
+lyricsFetcher_SOURCES=fileCtrl.cpp fileCtrl.h lrcFch_qianqian.cpp lrcFch_qianqian.h lrcFch_ting.h lrcFch_ting.cpp main.cpp stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp socketTool.h socketTool.c
+test_SOURCES=test.cpp fileCtrl.cpp fileCtrl.h lrcFch_qianqian.cpp lrcFch_qianqian.h lrcFch_ting.h lrcFch_ting.cpp  stringConv.cpp stringConv.h thread.h threadpool.h threadpool.cpp audioTag.cpp socketTool.h socketTool.c
+
+lyricsFetcher_LDADD=-ltag
+test_LDADD=-ltag
+
+

@@ -11,6 +11,8 @@
 		B235997B197CF67C00F51E43 /* audioTag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2359978197CF67C00F51E43 /* audioTag.cpp */; };
 		B24CE79C198793230022D0DF /* lrcFch_ting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24CE79A198793230022D0DF /* lrcFch_ting.cpp */; };
 		B24CE79D198793230022D0DF /* lrcFch_ting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24CE79A198793230022D0DF /* lrcFch_ting.cpp */; };
+		B2585F031988960E009D624F /* socketTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2585F011988960E009D624F /* socketTool.cpp */; };
+		B2585F041988960E009D624F /* socketTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2585F011988960E009D624F /* socketTool.cpp */; };
 		B2690AC0196BD2E30076715F /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2690ABE196BD2E30076715F /* threadpool.cpp */; };
 		B2690AC3196BD4860076715F /* fileCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2690AC1196BD4860076715F /* fileCtrl.cpp */; };
 		B2690AC4196BD5F10076715F /* fileCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2690AC1196BD4860076715F /* fileCtrl.cpp */; };
@@ -49,6 +51,8 @@
 		B2359979197CF67C00F51E43 /* audioTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioTag.h; sourceTree = "<group>"; };
 		B24CE79A198793230022D0DF /* lrcFch_ting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lrcFch_ting.cpp; sourceTree = "<group>"; };
 		B24CE79B198793230022D0DF /* lrcFch_ting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lrcFch_ting.h; sourceTree = "<group>"; };
+		B2585F011988960E009D624F /* socketTool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socketTool.cpp; sourceTree = "<group>"; };
+		B2585F021988960E009D624F /* socketTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socketTool.h; sourceTree = "<group>"; };
 		B2690ABE196BD2E30076715F /* threadpool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = threadpool.cpp; sourceTree = "<group>"; };
 		B2690ABF196BD2E30076715F /* threadpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadpool.h; sourceTree = "<group>"; };
 		B2690AC1196BD4860076715F /* fileCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileCtrl.cpp; sourceTree = "<group>"; };
@@ -108,6 +112,8 @@
 				B2E0F725196A7AF00007E064 /* lrcFch_qianqian.cpp */,
 				B24CE79B198793230022D0DF /* lrcFch_ting.h */,
 				B24CE79A198793230022D0DF /* lrcFch_ting.cpp */,
+				B2585F021988960E009D624F /* socketTool.h */,
+				B2585F011988960E009D624F /* socketTool.cpp */,
 				B2F9C318196A510B00632FD2 /* stringConv.h */,
 				B2F9C317196A510B00632FD2 /* stringConv.cpp */,
 				B2690ABF196BD2E30076715F /* threadpool.h */,
@@ -204,6 +210,7 @@
 				B2F9C31B196A510B00632FD2 /* stringConv.cpp in Sources */,
 				B235997A197CF67C00F51E43 /* audioTag.cpp in Sources */,
 				B2F9C319196A510B00632FD2 /* main.cpp in Sources */,
+				B2585F031988960E009D624F /* socketTool.cpp in Sources */,
 				B2690AC3196BD4860076715F /* fileCtrl.cpp in Sources */,
 				B2E0F727196A7AF00007E064 /* lrcFch_qianqian.cpp in Sources */,
 				B2690AC0196BD2E30076715F /* threadpool.cpp in Sources */,
@@ -218,6 +225,7 @@
 				B235997B197CF67C00F51E43 /* audioTag.cpp in Sources */,
 				B2E0F729196A86CB0007E064 /* stringConv.cpp in Sources */,
 				B24CE79D198793230022D0DF /* lrcFch_ting.cpp in Sources */,
+				B2585F041988960E009D624F /* socketTool.cpp in Sources */,
 				B2F9C32E196A667300632FD2 /* test.cpp in Sources */,
 				B2E0F728196A7AF00007E064 /* lrcFch_qianqian.cpp in Sources */,
 			);

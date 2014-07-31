@@ -15,6 +15,7 @@
 #include "stringConv.h"
 #include <arpa/inet.h>
 
+#include "lrcFch_ting.h"
 
 #include "audioTag.h"
 
@@ -133,7 +134,12 @@ void testCreateQianQianCode()
 
 
 
-
+void testBaiduTing()
+{
+    tingSearch("江美琪","爱哭鬼");
+    
+    
+}
 
 
 
@@ -142,8 +148,8 @@ int main(int argc, const char * argv[]) {
     
     //testFunctionInTaglib();
 
-
-    test(); return 0;
+    testBaiduTing(); return 0;
+    //test(); return 0;
     
     //testIterFiles();
     

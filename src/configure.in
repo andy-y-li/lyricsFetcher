@@ -2,10 +2,10 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT(lyricFecther, 0.1 , ynwlgh@hotmail.com )
+AC_INIT(lyricsFecther, 0.1 , ynwlgh@hotmail.com )
 AC_CONFIG_SRCDIR([fileCtrl.cpp])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE(lyricFecther,0.1)
+AM_INIT_AUTOMAKE(lyricsFecther,0.1)
 
 # Checks for programs.
 AC_PROG_CXX

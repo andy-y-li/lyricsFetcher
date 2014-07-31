@@ -8,12 +8,7 @@
 
 
 
-#include <vector>
-#include <string>
-
-
-
-
+#include <stdio.h>
 
 /**
  * is in unix or win-nt
@@ -36,21 +31,12 @@ typedef unsigned int UINT;
 #define _T(x) L##x
 #endif
 
+int GetLastError();
 
-bool tingSearch(const char * artist , const char * title);
-
-
-
-
-
-
-
-
-
-
-
-
-
+int curlUrlFile(const char *url , const char *savepath);
+int writeHttpContent(SOCKET httpResponse , const char *savepath );
+int writeHttpContent2(SOCKET socketDownload, FILE *pFile );
+BOOL CreateTcpSocketClient(const char *strHost , SOCKET *socketClient);
 
 
 

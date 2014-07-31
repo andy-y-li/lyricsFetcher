@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 gang.liao. All rights reserved.
 //
 
-#include "lrcFch.h"
+#include "lrcFch_qianqian.h"
 
-
+#include "socketTool.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>//fopen
@@ -41,7 +41,7 @@ typedef unsigned int UINT;
 #define closesocket(s) close(s)
 #define _tcslen wcslen
 #define _T(x) L##x
-
+#define  HTTP_PORT 80
 #include <arpa/inet.h>
 #include <errno.h>
 #include <sys/socket.h>
@@ -49,16 +49,6 @@ typedef unsigned int UINT;
 #include <unistd.h>//close
 #include <iosfwd>//base_string
 
-
-FILE * _tfopen(const char *filename, const char *mode)
-{
-    return fopen(filename, mode);
-}
-
-int GetLastError()
-{
-    return errno;
-}
 
 
 #endif
@@ -160,7 +150,7 @@ void CreateQianQianCode(char *id,char *ar,char*ti,std::string &code)
 
 
 
-#define  HTTP_PORT 80
+
 /*千千静听歌词搜索
 	网通服务器
 	125.39.78.11
@@ -381,6 +371,9 @@ Host: %s\r\n\
 
     return 1;
 }
+
+
+
 
 BOOL SearchLyric::_ParseResult()
 {

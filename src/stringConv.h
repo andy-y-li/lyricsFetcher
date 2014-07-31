@@ -17,7 +17,7 @@ char*  _itoa(int num , char *str , int radix);
 
 
 //convent a string to send in network.
-std::string str2UnicodeCode(const char *c,int len);
+std::string str2UnicodeCode(const char *c,int len, bool bTing = false );
 
 std::string unicodeCode2str(const char *c,int len);
 
