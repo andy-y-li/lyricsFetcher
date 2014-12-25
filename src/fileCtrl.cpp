@@ -44,9 +44,16 @@ int IterFiles(string srcPath, string destPath , void * (*doSomeThing)(const char
         {
             continue;
         }
+        
+        
         char szTmpPath[1024] = {0};
-        sprintf(szTmpPath, "%s/%s", srcPath.c_str(), pDirent->d_name);
-        destNewPath = destPath + "/" + pDirent->d_name;
+        
+        if (srcPath.back() != '/') {
+            srcPath.push_back('/');
+        }
+        
+        sprintf(szTmpPath, "%s%s", srcPath.c_str(), pDirent->d_name);
+        destNewPath = destPath  + pDirent->d_name;
 
         
         if (IsDirectory(szTmpPath))
@@ -68,7 +75,7 @@ int IterFiles(string srcPath, string destPath , void * (*doSomeThing)(const char
             /* do something */
             
 #ifdef DEBUG
-            printf("\n\n\nFile finded : ");
+            printf("File finded : ");
             printf("%s\n",destNewPath.c_str());
 #endif
             if(doSomeThing)

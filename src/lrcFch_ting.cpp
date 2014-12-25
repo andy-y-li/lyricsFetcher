@@ -18,10 +18,7 @@
 #ifdef DEBUG
 #include <pthread.h>
 #else
-int pthread_self()
-{
-	return 0;
-}
+
 #endif
 
 /**
