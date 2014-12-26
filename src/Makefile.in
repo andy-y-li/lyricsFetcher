@@ -254,7 +254,6 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-COMPILE_FLAGS = 
 LIBDIR = -L/usr/local/lib
 MYINCLUDES = -I/usr/local/include
 MYFLAGS = $(COMPILE_FLAGS)  $(MYINCLUDES) $(LIBDIR)

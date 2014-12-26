@@ -6,7 +6,6 @@
 
 
 ## ** Build instructions:**
-1. cd /xxx/src
 2. ./configure
 3. make
 
@@ -20,6 +19,4 @@ usage: lyricFetcher [music folder] [download folder]
 ## Requirements
 Only Tested In Mac os 10.10 Now.
 
-![](https://github.com/liaogang/lyricsFetcher/blob/master/images/a.png)
-![](https://github.com/liaogang/lyricsFetcher/blob/master/images/b.png)
-![](https://github.com/liaogang/lyricsFetcher/blob/master/images/r.png)
+![](https://github.com/liaogang/lyricsFetcher/blob/master/images/c.png)

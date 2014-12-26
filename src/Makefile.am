@@ -1,4 +1,3 @@
-COMPILE_FLAGS=
 LIBDIR=-L/usr/local/lib
 MYINCLUDES=-I/usr/local/include
 MYFLAGS=$(COMPILE_FLAGS)  $(MYINCLUDES) $(LIBDIR)

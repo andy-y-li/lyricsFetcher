@@ -48,10 +48,13 @@ int IterFiles(string srcPath, string destPath , void * (*doSomeThing)(const char
         
         char szTmpPath[1024] = {0};
         
-        if (srcPath.back() != '/') {
+        if (srcPath.back() != '/')
             srcPath.push_back('/');
-        }
         
+         if (destPath.back() != '/')
+            destPath.push_back('/');
+        
+
         sprintf(szTmpPath, "%s%s", srcPath.c_str(), pDirent->d_name);
         destNewPath = destPath  + pDirent->d_name;
 
