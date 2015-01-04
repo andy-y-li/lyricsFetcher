@@ -14,6 +14,7 @@
  * is in unix or win-nt
  */
 #ifndef _WIN_NT
+#include <unistd.h>
 #include <sys/types.h>
 #include <netinet/in.h>//sockaddr_in
 typedef unsigned int UINT;
@@ -33,10 +34,24 @@ typedef unsigned int UINT;
 
 int GetLastError();
 
-int curlUrlFile(const char *url , const char *savepath);
-int writeHttpContent(SOCKET httpResponse , const char *savepath );
-int writeHttpContent2(SOCKET socketDownload, FILE *pFile );
 BOOL CreateTcpSocketClient(const char *strHost , SOCKET *socketClient);
 
+/// return bytes sended.
+unsigned long sendDataToSocket(SOCKET socket , unsigned char *buffer , unsigned long bufLen);
 
+
+/// return bytes received.
+struct SocketBuffer
+{
+    unsigned long length;
+    unsigned char buffer[0];
+};
+
+SocketBuffer* recvSocketData(SOCKET socket );
+
+int writeHttpContent(SOCKET httpResponse , const char *savepath );
+
+int writeHttpContent2(SOCKET socketDownload, FILE *pFile );
+
+int curlUrlFile(const char *url , const char *savepath);
 

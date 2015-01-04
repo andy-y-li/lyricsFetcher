@@ -186,6 +186,14 @@ BOOL CreateTcpSocketClient(const char *strHost , SOCKET *socketClient)
 
 
 
+/// return bytes sended.
+unsigned long sendDataToSocket(SOCKET socket , unsigned char *buffer , unsigned long bufLen)
+{
+    //send data
+    unsigned long send=0,totalsend=0;
+    for (;(send=::send(socket,buffer+totalsend,bufLen-totalsend,0))>0;totalsend+=send);
+    return totalsend;
+}
 
 
 
@@ -280,6 +288,103 @@ int writeHttpContent2(SOCKET socketDownload, FILE *pFile )
 }
 
 
+SocketBuffer* recvSocketData(SOCKET socketDownload )
+{
+    SocketBuffer *resultBuffer = new SocketBuffer;
+    resultBuffer->length=0;
+    
+    int  bytesWrited = 0 ;
+    //recv data
+    char *buf = NULL;
+    const int RECV_BUF_LEN =2600;
+    buf=(char*)malloc(RECV_BUF_LEN);
+    if (buf)
+    {
+        ssize_t byteRecv=0;
+        byteRecv=recv(socketDownload,(void*)buf,RECV_BUF_LEN,0);
+        if(byteRecv>0)
+        {
+            const char find1[]="HTTP/1.";//1.1 or 1.0
+            const char find2[]=" 200 OK";
+            const char constContentLength[] = "\r\nContent-Length: ";
+            const char constBreakLine[] = "\r\n\r\n";
+            
+            int iContentLength=0;
+            const int  find1Len = sizeof(find1)/sizeof(find1[0])-1;
+            const int find2Len =sizeof(find2)/sizeof(find2[0])-1;
+            if (strncmp(buf, find1, find1Len ) == 0 &&
+                strncmp(buf + find1Len + 1, find2, find2Len ) == 0
+                )
+            {
+                ////find Content-Length and \r\n\r\n
+                char *contentLength = strstr(buf, constContentLength);
+                char *breakLine = strstr(buf, constBreakLine);
+                
+                if (contentLength)
+                {
+                    contentLength += sizeof(constContentLength)/sizeof(constContentLength[0]) -1;
+                    
+                    
+                    char *p = strchr(contentLength, '\r');
+                    
+                    char tmp [20] = {0};
+                    strncpy(tmp, contentLength , (int) (p - contentLength)) ;
+                    iContentLength = atoi(tmp);
+                    
+                    if (breakLine)
+                    {
+                        breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
+                       
+                        free(resultBuffer);
+                        resultBuffer=(SocketBuffer*)malloc( sizeof(SocketBuffer) + iContentLength);
+                        resultBuffer->length = iContentLength;
+                        
+                        int contentLengthRecv = (int)(buf + byteRecv - breakLine);
+                        memcpy(resultBuffer->buffer, breakLine , contentLengthRecv * sizeof(buf[0]) );
+                        
+                        
+                        while (contentLengthRecv < iContentLength )
+                        {
+                            byteRecv=recv(socketDownload , resultBuffer->buffer + contentLengthRecv , iContentLength - contentLengthRecv , 0 );
+                            
+                            contentLengthRecv += byteRecv ;
+                        }
+                        
+                        
+                        bytesWrited = iContentLength ;
+                        
+                        assert(bytesWrited == iContentLength);
+                    }
+                    else
+                    {
+                        printf("http error ,haven't find \"\r\n\r\n\" \n");
+                    }
+                }
+                else
+                {
+                    printf("http error, haven't find \"Content-Length\"\n");
+                }
+            }
+            else
+            {
+                printf("http error.\n");
+            }
+        }
+        else
+        {
+            printf ("recv nothing from server.\n " );
+        }
+        
+        free(buf);
+    }
+    else
+    {
+        printf("malloc error \n ");
+    }
+    
+    
+    return resultBuffer;
+}
 
 int writeHttpContent(SOCKET httpResponse , const char *savepath )
 {

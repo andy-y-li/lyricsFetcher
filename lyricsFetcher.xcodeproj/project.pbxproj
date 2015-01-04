@@ -106,8 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				B2F9C314196A510B00632FD2 /* main.cpp */,
-				B2359978197CF67C00F51E43 /* audioTag.cpp */,
 				B2359979197CF67C00F51E43 /* audioTag.h */,
+				B2359978197CF67C00F51E43 /* audioTag.cpp */,
 				B2E0F726196A7AF00007E064 /* lrcFch_qianqian.h */,
 				B2E0F725196A7AF00007E064 /* lrcFch_qianqian.cpp */,
 				B24CE79B198793230022D0DF /* lrcFch_ting.h */,
