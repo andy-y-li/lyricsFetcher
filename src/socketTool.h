@@ -41,13 +41,17 @@ unsigned long sendDataToSocket(SOCKET socket , unsigned char *buffer , unsigned 
 
 
 /// return bytes received.
-struct SocketBuffer
+struct MemBuffer
 {
     unsigned long length;
     unsigned char buffer[0];
 };
 
-SocketBuffer* recvSocketData(SOCKET socket );
+MemBuffer *newMemBuffer(int len);
+
+void deleteMemBuffer(MemBuffer *buffer);
+
+MemBuffer* recvSocketData(SOCKET socket );
 
 int writeHttpContent(SOCKET httpResponse , const char *savepath );
 

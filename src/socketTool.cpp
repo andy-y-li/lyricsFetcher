@@ -287,16 +287,26 @@ int writeHttpContent2(SOCKET socketDownload, FILE *pFile )
     return bytesWrited;
 }
 
-
-SocketBuffer* recvSocketData(SOCKET socketDownload )
+MemBuffer *newMemBuffer(int len)
 {
-    SocketBuffer *resultBuffer = new SocketBuffer;
-    resultBuffer->length=0;
+    MemBuffer *buffer=(MemBuffer*)malloc( sizeof(MemBuffer) + len);
+    buffer->length = len;
+    return buffer;
+}
+
+void deleteMemBuffer(MemBuffer *buffer)
+{
+    free(buffer);
+}
+
+MemBuffer* recvSocketData(SOCKET socketDownload )
+{
+    MemBuffer * resultBuffer = nullptr;
     
     int  bytesWrited = 0 ;
     //recv data
     char *buf = NULL;
-    const int RECV_BUF_LEN =2600;
+    const int RECV_BUF_LEN = 8000;
     buf=(char*)malloc(RECV_BUF_LEN);
     if (buf)
     {
@@ -335,9 +345,7 @@ SocketBuffer* recvSocketData(SOCKET socketDownload )
                     {
                         breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
                        
-                        free(resultBuffer);
-                        resultBuffer=(SocketBuffer*)malloc( sizeof(SocketBuffer) + iContentLength);
-                        resultBuffer->length = iContentLength;
+                        resultBuffer= newMemBuffer(iContentLength);
                         
                         int contentLengthRecv = (int)(buf + byteRecv - breakLine);
                         memcpy(resultBuffer->buffer, breakLine , contentLengthRecv * sizeof(buf[0]) );
@@ -350,10 +358,7 @@ SocketBuffer* recvSocketData(SOCKET socketDownload )
                             contentLengthRecv += byteRecv ;
                         }
                         
-                        
-                        bytesWrited = iContentLength ;
-                        
-                        assert(bytesWrited == iContentLength);
+
                     }
                     else
                     {
