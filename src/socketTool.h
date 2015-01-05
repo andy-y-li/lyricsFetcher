@@ -6,7 +6,8 @@
 *Copyright (c) 2014 gang.liao. All rights reserved.
 */
 
-
+#ifndef __HEADER_SOCKET_TOOL_H__
+#define __HEADER_SOCKET_TOOL_H__
 
 #include <stdio.h>
 
@@ -59,3 +60,5 @@ int writeHttpContent2(SOCKET socketDownload, FILE *pFile );
 
 int curlUrlFile(const char *url , const char *savepath);
 
+
+#endif
