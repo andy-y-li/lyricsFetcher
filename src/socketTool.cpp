@@ -322,57 +322,65 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
             int iContentLength=0;
             const int  find1Len = sizeof(find1)/sizeof(find1[0])-1;
             const int find2Len =sizeof(find2)/sizeof(find2[0])-1;
-            if (strncmp(buf, find1, find1Len ) == 0 &&
-                strncmp(buf + find1Len + 1, find2, find2Len ) == 0
-                )
+            if (strncmp(buf, find1, find1Len ) == 0 )
             {
-                ////find Content-Length and \r\n\r\n
-                char *contentLength = strstr(buf, constContentLength);
-                char *breakLine = strstr(buf, constBreakLine);
-                
-                if (contentLength)
+                if(strncmp(buf + find1Len + 1, find2, find2Len ) == 0
+                   )
                 {
-                    contentLength += sizeof(constContentLength)/sizeof(constContentLength[0]) -1;
+                    ////find Content-Length and \r\n\r\n
+                    char *contentLength = strstr(buf, constContentLength);
+                    char *breakLine = strstr(buf, constBreakLine);
                     
-                    
-                    char *p = strchr(contentLength, '\r');
-                    
-                    char tmp [20] = {0};
-                    strncpy(tmp, contentLength , (int) (p - contentLength)) ;
-                    iContentLength = atoi(tmp);
-                    
-                    if (breakLine)
+                    if (contentLength)
                     {
-                        breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
-                       
-                        resultBuffer= newMemBuffer(iContentLength);
-                        
-                        int contentLengthRecv = (int)(buf + byteRecv - breakLine);
-                        memcpy(resultBuffer->buffer, breakLine , contentLengthRecv * sizeof(buf[0]) );
+                        contentLength += sizeof(constContentLength)/sizeof(constContentLength[0]) -1;
                         
                         
-                        while (contentLengthRecv < iContentLength )
+                        char *p = strchr(contentLength, '\r');
+                        
+                        char tmp [20] = {0};
+                        strncpy(tmp, contentLength , (int) (p - contentLength)) ;
+                        iContentLength = atoi(tmp);
+                        
+                        if (breakLine)
                         {
-                            byteRecv=recv(socketDownload , resultBuffer->buffer + contentLengthRecv , iContentLength - contentLengthRecv , 0 );
+                            breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
                             
-                            contentLengthRecv += byteRecv ;
+                            resultBuffer= newMemBuffer(iContentLength);
+                            
+                            int contentLengthRecv = (int)(buf + byteRecv - breakLine);
+                            memcpy(resultBuffer->buffer, breakLine , contentLengthRecv * sizeof(buf[0]) );
+                            
+                            
+                            while (contentLengthRecv < iContentLength )
+                            {
+                                byteRecv=recv(socketDownload , resultBuffer->buffer + contentLengthRecv , iContentLength - contentLengthRecv , 0 );
+                                
+                                contentLengthRecv += byteRecv ;
+                            }
+                            
+                            
                         }
-                        
-
+                        else
+                        {
+                            printf("http error ,haven't find \"\r\n\r\n\" \n");
+                        }
                     }
                     else
                     {
-                        printf("http error ,haven't find \"\r\n\r\n\" \n");
+                        printf("http error, haven't find \"Content-Length\"\n");
                     }
                 }
                 else
                 {
-                    printf("http error, haven't find \"Content-Length\"\n");
+                    char tmp[4]={0};
+                    strncpy(tmp,  buf + find1Len + 2, 3);
+                    printf("http error. error code: %s\n",tmp);
                 }
             }
             else
             {
-                printf("http error.\n");
+                printf("http error.can not find `http header`.\n");
             }
         }
         else
