@@ -303,8 +303,6 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
 {
     MemBuffer * resultBuffer = nullptr;
     
-    int  bytesWrited = 0 ;
-    //recv data
     char *buf = NULL;
     const int RECV_BUF_LEN = 8000;
     buf=(char*)malloc(RECV_BUF_LEN);
@@ -314,6 +312,10 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
         byteRecv=recv(socketDownload,(void*)buf,RECV_BUF_LEN,0);
         if(byteRecv>0)
         {
+            /**
+             When an Entity-Body is included with a message, the length of that body may be determined in one of two ways. If a Content-Length header field is present, its value in bytes represents the length of the Entity-Body. Otherwise, the body length is determined by the closing of the connection by the server.
+             */
+            
             const char find1[]="HTTP/1.";//1.1 or 1.0
             const char find2[]=" 200 OK";
             const char constContentLength[] = "\r\nContent-Length: ";
@@ -368,7 +370,29 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
                     }
                     else
                     {
-                        printf("http error, haven't find \"Content-Length\"\n");
+                        if (breakLine)
+                        {
+                            breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
+                            // read till the end.
+                            const int bufferLength = 20000;
+                            resultBuffer = newMemBuffer(bufferLength);
+                            
+                            int contentLengthRecv = (int)(buf + byteRecv - breakLine);
+                            memcpy(resultBuffer->buffer, breakLine , contentLengthRecv * sizeof(buf[0]) );
+                            
+                            
+                            int contentBytesRecvTotal = contentLengthRecv;
+                            for(int contentBytesRecv= 1 ; contentBytesRecv > 0 && contentBytesRecvTotal <= bufferLength;  )
+                            {
+                                contentBytesRecv = recv(socketDownload , resultBuffer->buffer + contentBytesRecvTotal , bufferLength - contentBytesRecvTotal , 0 );
+                                contentBytesRecvTotal += contentBytesRecv;
+                            }
+                            
+                            printf("http 1.0, bytes received: %zd \n",contentBytesRecvTotal);
+                            
+                            if (bufferLength == contentBytesRecvTotal)
+                                printf("but response is too long , some was skipped. \n");
+                        }
                     }
                 }
                 else
@@ -398,6 +422,7 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
     
     return resultBuffer;
 }
+
 
 int writeHttpContent(SOCKET httpResponse , const char *savepath )
 {
