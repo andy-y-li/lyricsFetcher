@@ -381,7 +381,7 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
                             memcpy(resultBuffer->buffer, breakLine , contentLengthRecv * sizeof(buf[0]) );
                             
                             
-                            int contentBytesRecvTotal = contentLengthRecv;
+                            int contentBytesRecvTotal = 0;
                             for(int contentBytesRecv= 1 ; contentBytesRecv > 0 && contentBytesRecvTotal <= bufferLength;  )
                             {
                                 contentBytesRecv = recv(socketDownload , resultBuffer->buffer + contentBytesRecvTotal , bufferLength - contentBytesRecvTotal , 0 );
@@ -392,6 +392,7 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
                             
                             if (bufferLength == contentBytesRecvTotal)
                                 printf("but response is too long , some was skipped. \n");
+                            
                         }
                     }
                 }
