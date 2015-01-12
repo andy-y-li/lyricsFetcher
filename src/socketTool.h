@@ -9,12 +9,11 @@
 #ifndef __HEADER_SOCKET_TOOL_H__
 #define __HEADER_SOCKET_TOOL_H__
 
-#include <stdio.h>
 
 /**
  * is in unix or win-nt
  */
-#ifndef _WIN_NT_
+#ifndef _WINDOWS 
 #include <unistd.h>
 #include <sys/types.h>
 #include <netinet/in.h>//sockaddr_in
@@ -31,6 +30,8 @@ typedef unsigned int UINT;
 #define closesocket(s) close(s)
 #define _tcslen wcslen
 #define _T(x) L##x
+#else
+#include "stdafx.h"
 #endif
 
 /// a block of memory data.

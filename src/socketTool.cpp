@@ -14,11 +14,15 @@
 #include <stdlib.h>
 #include <stdio.h>//fopen
 
+#define  HTTP_PORT 80
 
 /**
  * is in unix or win-nt
  */
-#ifndef _WIN_NT_
+#ifdef _WINDOWS
+#include <winsock2.h> 
+#pragma comment(lib,"WS2_32.lib") 
+#else
 typedef unsigned int UINT;
 #define FALSE (0)
 #define TRUE  (1)
@@ -33,7 +37,6 @@ typedef unsigned int UINT;
 #define _tcslen wcslen
 #define _T(x) L##x
 
-#define  HTTP_PORT 80
 #include <arpa/inet.h>
 #include <errno.h>
 #include <sys/socket.h>
@@ -46,6 +49,24 @@ int GetLastError()
 }
 #endif
 
+BOOL MakeSureSocketStartUp()
+{
+	static BOOL bInit = FALSE;
+
+	if (!bInit)
+	{
+		WSADATA data;
+		int error;
+		error = WSAStartup(MAKEWORD(2, 2), &data);
+		if (error)
+			bInit = FALSE;
+		else
+			bInit = TRUE;
+	}
+	return bInit;
+}
+
+
 
 
 
@@ -53,15 +74,20 @@ BOOL CreateTcpSocketClient(const char *strHost , SOCKET *socketClient)
 {
     BOOL bRet = FALSE ;
     
+	if (!MakeSureSocketStartUp())
+	{
+		return FALSE;
+	}
+
     //fill socket addr struct
-    struct SOCKADDR_IN sockaddrClient;
+    SOCKADDR_IN sockaddrClient;
     memset((void*)&sockaddrClient,0,sizeof(sockaddrClient));
     sockaddrClient.sin_family=AF_INET;
     sockaddrClient.sin_port=htons(HTTP_PORT);
     
     
     //get host's ip address
-    struct HOSTENT *host=gethostbyname(strHost);
+    HOSTENT *host=gethostbyname(strHost);
     if (host)
     {
         if(host->h_addrtype == AF_INET)
@@ -103,7 +129,7 @@ BOOL CreateTcpSocketClient(const char *strHost , SOCKET *socketClient)
 unsigned long sendDataToSocket(SOCKET socket , unsigned char *buffer , unsigned long bufLen)
 {
     unsigned long send=0,totalsend=0;
-    for (;(send=::send(socket,buffer+totalsend,bufLen-totalsend,0))>0;totalsend+=send);
+    for (;(send=::send(socket,(const char*)buffer+totalsend,bufLen-totalsend,0))>0;totalsend+=send);
     return totalsend;
 }
 
@@ -119,8 +145,8 @@ int writeHttpContent2(SOCKET socketDownload, FILE *pFile )
     buf=(char*)malloc(RECV_BUF_LEN);
     if (buf)
     {
-        ssize_t byteRecv=0;
-        byteRecv=recv(socketDownload,(void*)buf,RECV_BUF_LEN,0);
+        size_t byteRecv=0;
+        byteRecv=recv(socketDownload,buf,RECV_BUF_LEN,0);
         if(recv>0)
         {
             const char find1[]="HTTP/1.";//1.1 or 1.0
@@ -220,8 +246,8 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
     buf=(char*)malloc(RECV_BUF_LEN);
     if (buf)
     {
-        ssize_t byteRecv=0;
-        byteRecv=recv(socketDownload,(void*)buf,RECV_BUF_LEN,0);
+        size_t byteRecv=0;
+        byteRecv=recv(socketDownload,buf,RECV_BUF_LEN,0);
         if(byteRecv>0)
         {
             /**
@@ -268,7 +294,7 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
                             
                             while (contentLengthRecv < iContentLength )
                             {
-                                byteRecv=recv(socketDownload , resultBuffer->buffer + contentLengthRecv , iContentLength - contentLengthRecv , 0 );
+                                byteRecv=recv(socketDownload ,(char*) resultBuffer->buffer + contentLengthRecv , iContentLength - contentLengthRecv , 0 );
                                 
                                 contentLengthRecv += byteRecv ;
                             }
@@ -295,7 +321,7 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
                             int contentBytesRecvTotal = contentLengthRecv;
                             for(int contentBytesRecv= 1 ; contentBytesRecv > 0 && contentBytesRecvTotal <= bufferLength;  )
                             {
-                                contentBytesRecv = recv(socketDownload , resultBuffer->buffer + contentBytesRecvTotal , bufferLength - contentBytesRecvTotal , 0 );
+                                contentBytesRecv = recv(socketDownload ,(char*) resultBuffer->buffer + contentBytesRecvTotal , bufferLength - contentBytesRecvTotal , 0 );
                                 contentBytesRecvTotal += contentBytesRecv;
                             }
                             
@@ -397,7 +423,7 @@ int curlUrlFile(const char *url , const char *savepath)
                         sprintf((char*)sendStr,curlUrlFileHeaderFormat,path,host);
                         
                         //send data
-                        ssize_t bytesSend=0,totalsend=0;
+                        size_t bytesSend=0,totalsend=0;
                         for (;(bytesSend=send(socketClient,(char*)sendStr+totalsend,strLen-totalsend,0))>0;totalsend+=bytesSend);
                         
                         if (totalsend)
