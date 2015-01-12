@@ -49,92 +49,6 @@ int GetLastError()
 
 
 
-
-
-//%s for %E5%9B%9A%E9%B8%9F$$%E9%82%93%E7%B4%AB%E6%A3%8B
-
-const char searchHeader[]=
-"GET /v1/restserver/ting?method=baidu.ting.search.lrcpic&format=json&from=bmpc&version=1.0.0&version_d=9.0.4.7&query=%s&ts=41451944&type=2&e=UZISa2PLtV8fo8ah2vairbLl33U2XVUlRzuZKXFjVCRcBuGgVlPwdmDiwgqcv52XkNA8Zlvg4tz6PqgwQP9eHQjGor7Ma59Y87C7yZcmMJA%3D HTTP/1.1\
-Connection: Keep-Alive\
-Referer: http://pc.music.baidu.com\
-User-Agent: bmpc_1.0.0\
-Host: tingapi.ting.baidu.com";
-
-const char strAddrTing[] = "tingapi.ting.baidu.com" ;
-
-
-
-
-
-SOCKET socketClient;
-BOOL _initSocket()
-{
-    BOOL bRet ;
-    bRet = FALSE;
-    
-    //in socket
-    struct SOCKADDR_IN sockaddrClient;
-    memset((void*)&sockaddrClient,0,sizeof(sockaddrClient));
-    sockaddrClient.sin_family=AF_INET;
-    sockaddrClient.sin_port=htons(HTTP_PORT);
-    
-    
-    //get ip by name
-    struct HOSTENT *host= gethostbyname(strAddrTing);
-    if (!host)
-    {
-        bRet = FALSE;
-    }
-    else
-    {
-        if(host->h_addrtype == AF_INET)
-             sockaddrClient.sin_addr.s_addr=*(u_long *) host->h_addr_list[0];
-    }
-    
-    
-    //create client socket
-    socketClient=socket(AF_INET,SOCK_STREAM,0);
-    if (socketClient==INVALID_SOCKET )
-    {
-        bRet = FALSE;
-        //DWORD error=GetLastError();
-    }
-    else
-          bRet = TRUE;
-    
-    
-    return  bRet;
-}
-
-
-
-BOOL search(const char * artist , const char * title)
-{
-    BOOL bRet = FALSE;
-    
-    SOCKET socketClient ;
-    if( CreateTcpSocketClient(strAddrTing, &socketClient) )
-    {
-        
-        
-        
-        
-        
-        
-        
-    }
-    
-    
-    
-    
-    return bRet;
-}
-
-
-
-
-
-
 BOOL CreateTcpSocketClient(const char *strHost , SOCKET *socketClient)
 {
     BOOL bRet = FALSE ;
@@ -186,10 +100,8 @@ BOOL CreateTcpSocketClient(const char *strHost , SOCKET *socketClient)
 
 
 
-/// return bytes sended.
 unsigned long sendDataToSocket(SOCKET socket , unsigned char *buffer , unsigned long bufLen)
 {
-    //send data
     unsigned long send=0,totalsend=0;
     for (;(send=::send(socket,buffer+totalsend,bufLen-totalsend,0))>0;totalsend+=send);
     return totalsend;
@@ -374,7 +286,7 @@ MemBuffer* recvSocketData(SOCKET socketDownload )
                         {
                             breakLine+=sizeof(constBreakLine)/sizeof(constBreakLine[0])-1;
                             // read till the end.
-                            const int bufferLength = 20000;
+                            const int bufferLength = 90000;
                             resultBuffer = newMemBuffer(bufferLength);
                             
                             int contentLengthRecv = (int)(buf + byteRecv - breakLine);
@@ -468,7 +380,8 @@ int curlUrlFile(const char *url , const char *savepath)
         const char *hostBegin,*hostEnd;
         hostBegin=url + protocolLen  ;
         
-        if (hostBegin) {
+        if (hostBegin)
+        {
             hostEnd = strchr(hostBegin, '/');
             if (hostEnd)
             {
@@ -476,10 +389,6 @@ int curlUrlFile(const char *url , const char *savepath)
                 path = hostEnd;
                 if (path)
                 {
-                    //char header[200]={0};
-                    //sprintf(header, curlUrlFileHeaderFormat, path , host );
-                    
-                    
                     SOCKET socketClient;
                     if(CreateTcpSocketClient(host, &socketClient) )
                     {
@@ -507,9 +416,7 @@ int curlUrlFile(const char *url , const char *savepath)
         printf("protocol error.");
     }
     
-    
-    
-    
+
     return bytesWrited;
 }
 
