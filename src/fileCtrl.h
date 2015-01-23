@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 
+using namespace std;
 
 bool IsDirectory(char *pszName);
 
