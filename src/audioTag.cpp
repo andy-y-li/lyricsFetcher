@@ -11,7 +11,7 @@
 
 using namespace TagLib;
 
-bool getId3Info(const char * filename , char *artist , char * title  )
+bool getId3Info(const char * filename , char *artist , char * title  ,char *album, char *genre, char *year)
 {
 	static bool bInit = false;
 	if(bInit == false)
@@ -28,80 +28,81 @@ bool getId3Info(const char * filename , char *artist , char * title  )
     
     
     ID3v2::Tag *id3v2tag = f.ID3v2Tag();
-    bool bInvalidID3V2= false;
+    
+    bool validId3v2 = false;
+    bool validId3v1 = false;
+    
     if(id3v2tag)
     {
         strcpy(artist,(const char*) id3v2tag->artist().toCString(true));
         strcpy(title,id3v2tag->title().toCString(true));
+        
+        strcpy(album,id3v2tag->album().toCString(true));
+        strcpy(genre,id3v2tag->genre().toCString(true));
+        
+        year[0]='?';
+        year[1]='\0';
+        uint uYear=id3v2tag->year();
+        if(uYear!=0)
+            sprintf(year, "%u" ,uYear);
+        
+        if ( strlen(title) > 0  || strlen(artist) > 0 )
+            validId3v2 = true;
             
-            
-            if ( strlen(title) == 0  || strlen(artist)==0 )
-            {
-                bInvalidID3V2=true;
-            }
-            else
-            {
-            }
     }
-    else
-    {
-        bInvalidID3V2= true;
-    }
-    
 
-    bool scanId3v1  = false ;
 
-    if ( bInvalidID3V2 )
-	    scanId3v1 = true;
-    
 
     ID3v1::Tag *id3v1tag=NULL;
-    if( scanId3v1 )
+    if( ! validId3v2 )
     {
         id3v1tag = f.ID3v1Tag();
         if(id3v1tag)
         {
             strcpy(artist,id3v1tag->artist().toCString(true));
             strcpy(title,id3v1tag->title().toCString(true));
+
             
-            //the id3v1tag string may be wrongly
-            //like Œ“∫‹∫√0000fsadfsdf...
-           // title=id3v1tag->title().toWString();
-           // artist=id3v1tag->artist().toWString();
-           // album=id3v1tag->album().toWString();
-           // genre=id3v1tag->genre().toWString();
+            strcpy(album,id3v1tag->album().toCString(true));
+            strcpy(genre,id3v1tag->genre().toCString(true));
+
+            year[0]='?';
+            year[1]='\0';
+            uint uYear=id3v1tag->year();
+            if(uYear!=0)
+                sprintf(year, "%d" ,uYear);
             
-           // TCHAR cYear[MAX_PATH]={_T("?")};
-//            uYear=id3v1tag->year();
-//            if(uYear!=0)
-//                _itow(id3v1tag->year(),cYear,10);
-//            year=cYear;
-//
-            
-            //to fix
-//            TrimRightByNull(title);
-//            TrimRightByNull(artist);
-//            TrimRightByNull(album);
-//            TrimRightByNull(genre);
+            if ( strlen(title) > 0  || strlen(artist) > 0 )
+                validId3v1 = true;
         }
     }
     
     
-    if(id3v2tag || id3v1tag)
+    if(validId3v2  || validId3v1)
     {
         //if the title is empty ,we will use the filename
         //without suffix
-        if (strlen(title))
+        if (!strlen(title))
         {
-//            int a=url.find_last_of('\\');
-//            int b=url.find_last_of('.');
-//            if (a<b && b!=url.npos)
-//                title=url.substr(a+1,b-(a+1));
+            std::string url(filename);
+#ifdef _WINDOW
+            int a=url.find_last_of('\\');
+#else
+            int a=url.find_last_of('/');
+#endif
+            int b=url.find_last_of('.');
+            if (a<b && b!=url.npos)
+            {
+                std::string title2=url.substr(a+1,b-(a+1));
+                strcpy(title, title2.c_str());
+            }
+            
+            
         }
     }
     
     
-    return (id3v2tag || id3v1tag) && (strlen(artist) > 1 || strlen(title) >1 ) ;
+    return (validId3v2  || validId3v1) && (strlen(artist) > 1 || strlen(title) >1 ) ;
 }
 
 
