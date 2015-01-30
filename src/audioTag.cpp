@@ -20,12 +20,9 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
 		bInit = true;
 	}
     
-
-
    	MPEG::File f(filename);
     
-    APE::Tag *apeTag=f.APETag();
-    
+    //APE::Tag *apeTag=f.APETag();
     
     ID3v2::Tag *id3v2tag = f.ID3v2Tag();
     
@@ -88,9 +85,9 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
 #ifdef _WINDOW
             int a=url.find_last_of('\\');
 #else
-            int a=url.find_last_of('/');
+            int a=(int)url.find_last_of('/');
 #endif
-            int b=url.find_last_of('.');
+            int b=(int)url.find_last_of('.');
             if (a<b && b!=url.npos)
             {
                 std::string title2=url.substr(a+1,b-(a+1));
