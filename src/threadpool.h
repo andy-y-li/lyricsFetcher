@@ -17,3 +17,4 @@ typedef struct job{
     void *arg;/* argument to process */
     struct job * next;
 }Job;
+

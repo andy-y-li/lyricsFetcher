@@ -145,8 +145,10 @@ void * routine(void *arg)
         free(job);
         job=NULL;
     }
+    
     /*You should never get here*/
-    pthread_exit(NULL);
+    //pthread_exit(NULL);
+    
 }
 
 
