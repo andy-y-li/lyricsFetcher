@@ -1,3 +1,5 @@
+# lyricsFetcher [![Build Status](https://travis-ci.org/liaogang/lyricsFetcher.svg?branch=master)](https://travis-ci.org/liaogang/lyricsFetcher)
+
 # lyricsFetcher is a command tool to fetch lyrics from qianqian server
   The Create Secret Code functon is copied from a foobar2k's python plug-in.(CreateQianQianCode)
 
