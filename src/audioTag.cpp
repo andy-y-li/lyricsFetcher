@@ -36,8 +36,8 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
         strcpy(album,id3v2tag->album().toCString(true));
         strcpy(genre,id3v2tag->genre().toCString(true));
         
-        year[0]='?';
-        year[1]='\0';
+//        year[0]='?';
+//        year[1]='\0';
         uint uYear=id3v2tag->year();
         if(uYear!=0)
             sprintf(year, "%u" ,uYear);
@@ -62,8 +62,8 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
             strcpy(album,id3v1tag->album().toCString(true));
             strcpy(genre,id3v1tag->genre().toCString(true));
 
-            year[0]='?';
-            year[1]='\0';
+//            year[0]='?';
+//            year[1]='\0';
             uint uYear=id3v1tag->year();
             if(uYear!=0)
                 sprintf(year, "%d" ,uYear);
