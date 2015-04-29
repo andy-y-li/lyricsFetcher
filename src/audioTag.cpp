@@ -12,16 +12,7 @@ using namespace TagLib;
 
 bool getId3Info(const char * filename , char *artist , char * title  ,char *album, char *genre, char *year)
 {
-	static bool bInit = false;
-	if(bInit == false)
-	{
-		//to do 
-		bInit = true;
-	}
-    
    	MPEG::File f(filename);
-    
-    //APE::Tag *apeTag=f.APETag();
     
     ID3v2::Tag *id3v2tag = f.ID3v2Tag();
     
@@ -36,8 +27,7 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
         strcpy(album,id3v2tag->album().toCString(true));
         strcpy(genre,id3v2tag->genre().toCString(true));
         
-//        year[0]='?';
-//        year[1]='\0';
+        year[0]='\0';
         uint uYear=id3v2tag->year();
         if(uYear!=0)
             sprintf(year, "%u" ,uYear);
@@ -62,8 +52,7 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
             strcpy(album,id3v1tag->album().toCString(true));
             strcpy(genre,id3v1tag->genre().toCString(true));
 
-//            year[0]='?';
-//            year[1]='\0';
+            year[0]='\0';
             uint uYear=id3v1tag->year();
             if(uYear!=0)
                 sprintf(year, "%d" ,uYear);
