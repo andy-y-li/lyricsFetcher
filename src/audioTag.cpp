@@ -7,6 +7,7 @@
 #include <taglib/apetag.h>
 #include <taglib/id3v1tag.h>
 
+#include "stringConv.h"
 
 using namespace TagLib;
 
@@ -90,15 +91,23 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
     bool validId3v2 = false;
     bool validId3v1 = false;
     
+    
+    
+    artist[0]=' ';
+    album[0]=' ';
+    title[0]=' ';
+    genre[0]=' ';
+    year[0]=' ';
+    
     if(id3v2tag)
     {
-        strcpy(artist,(const char*) id3v2tag->artist().toCString(true));
-        strcpy(title,id3v2tag->title().toCString(true));
+        strcpy(artist,id3v2tag->artist().toCString(false));
+        strcpy(title,id3v2tag->title().toCString(false));
         
-        strcpy(album,id3v2tag->album().toCString(true));
-        strcpy(genre,id3v2tag->genre().toCString(true));
+        strcpy(album,id3v2tag->album().toCString(false));
+        strcpy(genre,id3v2tag->genre().toCString(false));
         
-        year[0]='\0';
+        // year[0]='\0';
         uint uYear=id3v2tag->year();
         if(uYear!=0)
             sprintf(year, "%u" ,uYear);
@@ -116,14 +125,14 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
         id3v1tag = f.ID3v1Tag();
         if(id3v1tag)
         {
-            strcpy(artist,id3v1tag->artist().toCString(true));
-            strcpy(title,id3v1tag->title().toCString(true));
+            strcpy(artist,id3v1tag->artist().toCString(false));
+            strcpy(title,id3v1tag->title().toCString(false));
 
             
-            strcpy(album,id3v1tag->album().toCString(true));
-            strcpy(genre,id3v1tag->genre().toCString(true));
+            strcpy(album,id3v1tag->album().toCString(false));
+            strcpy(genre,id3v1tag->genre().toCString(false));
 
-            year[0]='\0';
+//            year[0]='\0';
             uint uYear=id3v1tag->year();
             if(uYear!=0)
                 sprintf(year, "%d" ,uYear);
@@ -160,28 +169,3 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
     
     return (validId3v2  || validId3v1) && (strlen(artist) > 1 || strlen(title) >1 ) ;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
