@@ -181,8 +181,6 @@ void gdkStringTaglib2NS(NSMutableString *ns, TagLib::String from)
     if (!from.isEmpty())
     {
         BOOL isLatin = from.isLatin1();
-        printf("isLatin: %d\n",isLatin);
-        printf("isAscii: %d\n",from.isAscii());
         
         char temp[256];
         strcpy(temp,from.toCString(false));
@@ -204,8 +202,6 @@ void stringTaglib2NS(NSMutableString *ns, TagLib::String from)
     if(!from.isEmpty())
     {
         BOOL isLatin = from.isLatin1();
-        printf("isLatin: %d\n",isLatin);
-        printf("isAscii: %d\n",from.isAscii());
         
         char temp[256];
         if ( false && !from.isAscii() && !from.isLatin1())
@@ -280,7 +276,6 @@ bool getID3Info(const char * filename , NSMutableString *artist , NSMutableStrin
     
     if(id3v2tag && !id3v2tag->isEmpty())
     {
-        NSLog(@"id3v2.");
         stringTaglib2NS(artist, id3v2tag->artist());
         stringTaglib2NS(title, id3v2tag->title());
         stringTaglib2NS(album, id3v2tag->album());
@@ -304,7 +299,6 @@ bool getID3Info(const char * filename , NSMutableString *artist , NSMutableStrin
     ID3v1::Tag *id3v1tag=NULL;
     if( ! validId3v2 )
     {
-        NSLog(@"id3v1.");
         id3v1tag = f.ID3v1Tag();
         
         if(id3v1tag && !id3v1tag->isEmpty())
