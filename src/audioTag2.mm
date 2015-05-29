@@ -14,7 +14,7 @@
 
 using namespace TagLib;
 
-
+/*
 bool getId3Info(const char * filename , char *artist , char * title  )
 {
     static bool bInit = false;
@@ -83,10 +83,10 @@ bool getId3Info(const char * filename , char *artist , char * title  )
     
     return (id3v2tag || id3v1tag) && (strlen(artist) > 1 || strlen(title) >1 ) ;
 }
+*/
 
 
-
-
+/*
 bool getId3Info(const char * filename , char *artist , char * title  ,char *album, char *genre, char *year)
 {
    	MPEG::File f(filename);
@@ -175,6 +175,7 @@ bool getId3Info(const char * filename , char *artist , char * title  ,char *albu
     
     return (validId3v2  || validId3v1) && (strlen(artist) > 1 || strlen(title) >1 ) ;
 }
+ */
 
 void gdkStringTaglib2NS(NSMutableString *ns, TagLib::String from)
 {
@@ -199,6 +200,8 @@ void gdkStringTaglib2NS(NSMutableString *ns, TagLib::String from)
 /// Using utf8 if it's not gbk encoding.
 void stringTaglib2NS(NSMutableString *ns, TagLib::String from)
 {
+    std::cout<<from<<std::endl;
+    
     if(!from.isEmpty())
     {
         BOOL isLatin = from.isLatin1();
@@ -249,10 +252,9 @@ public:
         NSString *temp = [[NSString alloc] initWithBytes:data.data() length:data.size() encoding:gbkEncoding];
         
         if(temp)
-            return String(temp.UTF8String,String::UTF8);
+            return String (temp.UTF8String,String::UTF8);
         
-        
-        return String ("");
+        return String::null;
     }
     
 };
@@ -260,6 +262,12 @@ public:
 /// Reg gbk
 bool getID3Info(const char * filename , NSMutableString *artist , NSMutableString * title  ,NSMutableString *album, NSMutableString *genre, NSMutableString *year)
 {
+    static MyLatin1StringHandler *handler = new MyLatin1StringHandler;
+    if (handler) {
+        ID3v2::Tag::setLatin1StringHandler(handler);
+        handler = nullptr;
+    }
+    
     if (strstr(filename, ".DS_Store") )
         return false;
     
@@ -267,8 +275,6 @@ bool getID3Info(const char * filename , NSMutableString *artist , NSMutableStrin
     
     ID3v2::Tag *id3v2tag = f.ID3v2Tag();
     
-    static MyLatin1StringHandler *handler = new MyLatin1StringHandler;
-    id3v2tag->setLatin1StringHandler(handler);
     
     bool validId3v2 = false;
     bool validId3v1 = false;
