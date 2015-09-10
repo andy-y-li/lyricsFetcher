@@ -17,9 +17,12 @@ Pod::Spec.new do |s|
 
   s.name         = "lyricsFetcher"
   s.version      = "0.0.1"
-  s.summary      = "LyricsFetcher is a command tool to fetch lyrics server for windows or unix.This library	contains useful tool about: fileCtrl,threadpool,audioTag,stringConv... "
+  s.summary      = "LyricsFetcher is a command tool to fetch lyrics server for windows or unix."
 
   s.description  = <<-DESC
+
+LyricsFetcher is a command tool to fetch lyrics server for windows or unix.This library	contains useful tool about: fileCtrl,threadpool,audioTag,stringConv... 
+
                    DESC
 
   s.homepage     = "https://github.com/liaogang/lyricsFetcher.git"
