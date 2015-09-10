@@ -77,8 +77,10 @@ int IterFiles(string srcPath, string destPath , void * (*doSomeThing)(const char
         {
             /* do something */
             
+#ifdef DEBUG
             printf("File finded : ");
             printf("%s\n",destNewPath.c_str());
+#endif
 
             if(doSomeThing)
                 doSomeThing( destNewPath.c_str() , arg);
