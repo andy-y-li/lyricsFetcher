@@ -20,7 +20,6 @@ Pod::Spec.new do |s|
   s.summary      = "LyricsFetcher is a command tool to fetch lyrics server for windows or unix.This library	contains useful tool about: fileCtrl,threadpool,audioTag,stringConv... "
 
   s.description  = <<-DESC
-
                    DESC
 
   s.homepage     = "https://github.com/liaogang/lyricsFetcher.git"
@@ -84,7 +83,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "src""
+  s.source_files  = "src"
 
   s.public_header_files = "src"
 
