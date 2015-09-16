@@ -127,6 +127,6 @@ LyricsFetcher is a command tool to fetch lyrics server for windows or unix.This 
   # s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-   s.dependency "taglib"
+   s.dependency 'socketTool',:git => 'https://github.com/liaogang/socketTool'
 
 end
