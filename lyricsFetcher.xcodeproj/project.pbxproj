@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E5923E61A6519A700F20C72 /* socketTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E5923E41A6519A700F20C72 /* socketTool.cpp */; };
+		1EBECC581BA93B4A005D965D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1EBECC571BA93B4A005D965D /* main.cpp */; };
 		1ED8A84F1A4D2235004C6297 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1ED8A84D1A4D2216004C6297 /* test.cpp */; };
+		2D129C2FE3DDDD770239E682 /* libPods-lyricsFetcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E1AFAFC526A5887FF2A0EADA /* libPods-lyricsFetcher.a */; };
 		B235997A197CF67C00F51E43 /* audioTag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2359978197CF67C00F51E43 /* audioTag.cpp */; };
 		B235997B197CF67C00F51E43 /* audioTag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2359978197CF67C00F51E43 /* audioTag.cpp */; };
 		B24CE79C198793230022D0DF /* lrcFch_ting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24CE79A198793230022D0DF /* lrcFch_ting.cpp */; };
@@ -19,7 +20,6 @@
 		B2E0F727196A7AF00007E064 /* lrcFch_qianqian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2E0F725196A7AF00007E064 /* lrcFch_qianqian.cpp */; };
 		B2E0F728196A7AF00007E064 /* lrcFch_qianqian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2E0F725196A7AF00007E064 /* lrcFch_qianqian.cpp */; };
 		B2E0F729196A86CB0007E064 /* stringConv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2F9C317196A510B00632FD2 /* stringConv.cpp */; };
-		B2F9C319196A510B00632FD2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2F9C314196A510B00632FD2 /* main.cpp */; };
 		B2F9C31B196A510B00632FD2 /* stringConv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2F9C317196A510B00632FD2 /* stringConv.cpp */; };
 /* End PBXBuildFile section */
 
@@ -45,9 +45,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1E5923E41A6519A700F20C72 /* socketTool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socketTool.cpp; sourceTree = "<group>"; };
-		1E5923E51A6519A700F20C72 /* socketTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socketTool.h; sourceTree = "<group>"; };
+		1EBECC571BA93B4A005D965D /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = test/main.cpp; sourceTree = "<group>"; };
 		1ED8A84D1A4D2216004C6297 /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test.cpp; path = test/test.cpp; sourceTree = "<group>"; };
+		2AB96A7A32A4890B21ECB407 /* Pods-lyricsFetcher.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lyricsFetcher.debug.xcconfig"; path = "Pods/Target Support Files/Pods-lyricsFetcher/Pods-lyricsFetcher.debug.xcconfig"; sourceTree = "<group>"; };
+		591B107CAD73CE246A13E5B0 /* Pods-lyricsFetcher.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lyricsFetcher.release.xcconfig"; path = "Pods/Target Support Files/Pods-lyricsFetcher/Pods-lyricsFetcher.release.xcconfig"; sourceTree = "<group>"; };
 		B22E1B3419667407007A8086 /* lyricsFetcher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lyricsFetcher; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2359978197CF67C00F51E43 /* audioTag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioTag.cpp; sourceTree = "<group>"; };
 		B2359979197CF67C00F51E43 /* audioTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioTag.h; sourceTree = "<group>"; };
@@ -59,10 +60,10 @@
 		B2690AC2196BD4860076715F /* fileCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileCtrl.h; sourceTree = "<group>"; };
 		B2E0F725196A7AF00007E064 /* lrcFch_qianqian.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lrcFch_qianqian.cpp; sourceTree = "<group>"; };
 		B2E0F726196A7AF00007E064 /* lrcFch_qianqian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lrcFch_qianqian.h; sourceTree = "<group>"; };
-		B2F9C314196A510B00632FD2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B2F9C317196A510B00632FD2 /* stringConv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stringConv.cpp; sourceTree = "<group>"; };
 		B2F9C318196A510B00632FD2 /* stringConv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringConv.h; sourceTree = "<group>"; };
 		B2F9C32D196A666300632FD2 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1AFAFC526A5887FF2A0EADA /* libPods-lyricsFetcher.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lyricsFetcher.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D129C2FE3DDDD770239E682 /* libPods-lyricsFetcher.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,23 +85,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1E5923E31A6519A700F20C72 /* socketTool */ = {
+		514DC458B963B2FB7409AB24 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1E5923E41A6519A700F20C72 /* socketTool.cpp */,
-				1E5923E51A6519A700F20C72 /* socketTool.h */,
+				E1AFAFC526A5887FF2A0EADA /* libPods-lyricsFetcher.a */,
 			);
-			name = socketTool;
-			path = src/socketTool;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		B22E1B2B19667407007A8086 = {
 			isa = PBXGroup;
 			children = (
-				1E5923E31A6519A700F20C72 /* socketTool */,
 				B2F9C31F196A530A00632FD2 /* test */,
 				B2F9C311196A510B00632FD2 /* src */,
 				B22E1B3519667407007A8086 /* Products */,
+				D07150B645B70FEA053B5D68 /* Pods */,
+				514DC458B963B2FB7409AB24 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,7 +116,6 @@
 		B2F9C311196A510B00632FD2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				B2F9C314196A510B00632FD2 /* main.cpp */,
 				B2359979197CF67C00F51E43 /* audioTag.h */,
 				B2359978197CF67C00F51E43 /* audioTag.cpp */,
 				B2E0F726196A7AF00007E064 /* lrcFch_qianqian.h */,
@@ -136,8 +136,18 @@
 			isa = PBXGroup;
 			children = (
 				1ED8A84D1A4D2216004C6297 /* test.cpp */,
+				1EBECC571BA93B4A005D965D /* main.cpp */,
 			);
 			name = test;
+			sourceTree = "<group>";
+		};
+		D07150B645B70FEA053B5D68 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2AB96A7A32A4890B21ECB407 /* Pods-lyricsFetcher.debug.xcconfig */,
+				591B107CAD73CE246A13E5B0 /* Pods-lyricsFetcher.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,9 +157,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B22E1B3B19667407007A8086 /* Build configuration list for PBXNativeTarget "lyricsFetcher" */;
 			buildPhases = (
+				FB316B39DE323A5175C8544C /* Check Pods Manifest.lock */,
 				B22E1B3019667407007A8086 /* Sources */,
 				B22E1B3119667407007A8086 /* Frameworks */,
 				B22E1B3219667407007A8086 /* CopyFiles */,
+				34E8AE4B7A98BB43BB46B510 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -209,6 +221,39 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		34E8AE4B7A98BB43BB46B510 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-lyricsFetcher/Pods-lyricsFetcher-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FB316B39DE323A5175C8544C /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B22E1B3019667407007A8086 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -217,10 +262,9 @@
 				B24CE79C198793230022D0DF /* lrcFch_ting.cpp in Sources */,
 				B2F9C31B196A510B00632FD2 /* stringConv.cpp in Sources */,
 				B235997A197CF67C00F51E43 /* audioTag.cpp in Sources */,
-				B2F9C319196A510B00632FD2 /* main.cpp in Sources */,
 				B2690AC3196BD4860076715F /* fileCtrl.cpp in Sources */,
 				B2E0F727196A7AF00007E064 /* lrcFch_qianqian.cpp in Sources */,
-				1E5923E61A6519A700F20C72 /* socketTool.cpp in Sources */,
+				1EBECC581BA93B4A005D965D /* main.cpp in Sources */,
 				B2690AC0196BD2E30076715F /* threadpool.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,7 +375,12 @@
 		};
 		B22E1B3C19667407007A8086 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AB96A7A32A4890B21ECB407 /* Pods-lyricsFetcher.debug.xcconfig */;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/src",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = build;
 			};
@@ -339,7 +388,12 @@
 		};
 		B22E1B3D19667407007A8086 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 591B107CAD73CE246A13E5B0 /* Pods-lyricsFetcher.release.xcconfig */;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/src",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = build;
 			};

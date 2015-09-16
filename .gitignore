@@ -21,3 +21,7 @@ lyricsFetcher.xcodeproj/project.xcworkspace/xcuserdata/liaogang.xcuserdatad
 lyricsFetcher.xcodeproj/xcuserdata/liaogang.xcuserdatad/xcdebugger
 Makefile
 lyricsFetcher
+Pods
+lyricsFetcher.xcworkspace/xcshareddata
+lyricsFetcher.xcworkspace/xcuserdata
+Podfile.lock
