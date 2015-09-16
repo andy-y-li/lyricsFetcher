@@ -114,7 +114,7 @@ LyricsFetcher is a command tool to fetch lyrics server for windows or unix.This 
   # s.framework  = "SomeFramework"
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
-  # s.library   = "taglib"
+  s.library   = "taglib"
   # s.libraries = "iconv", "xml2"
 
 
