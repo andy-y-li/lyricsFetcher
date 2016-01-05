@@ -9,8 +9,11 @@
 #include <taglib/mpegfile.h>
 #include <taglib/apetag.h>
 #include <taglib/id3v1tag.h>
+#include <taglib/wavfile.h>
+#include <taglib/infotag.h>
 
 #include "stringConv.h"
+
 
 using namespace TagLib;
 
@@ -259,28 +262,16 @@ public:
     
 };
 
-/// Reg gbk
-bool getID3Info(const char * filename , NSMutableString *artist , NSMutableString * title  ,NSMutableString *album, NSMutableString *genre, NSMutableString *year)
+
+/**Since A valide audio file may have no tag info,so this will always @return true.
+ */
+bool getID3Info(ID3v2::Tag *id3v2tag, TagLib::Tag *other_tag ,const char * filename , NSMutableString *artist , NSMutableString * title  ,NSMutableString *album, NSMutableString *genre, NSMutableString *year)
 {
-    static MyLatin1StringHandler *handler = new MyLatin1StringHandler;
-    if (handler) {
-        ID3v2::Tag::setLatin1StringHandler(handler);
-        handler = nullptr;
-    }
-    
-    if (strstr(filename, ".DS_Store") )
-        return false;
-    
-    MPEG::File f(filename);
-    
-    ID3v2::Tag *id3v2tag = f.ID3v2Tag();
-    
-    
     bool validId3v2 = false;
     bool validId3v1 = false;
     
     
-    if(id3v2tag && !id3v2tag->isEmpty())
+    if(id3v2tag && !id3v2tag->isEmpty() )
     {
         stringTaglib2NS(artist, id3v2tag->artist());
         stringTaglib2NS(title, id3v2tag->title());
@@ -302,25 +293,23 @@ bool getID3Info(const char * filename , NSMutableString *artist , NSMutableStrin
     
     
     
-    ID3v1::Tag *id3v1tag=NULL;
+    
     if( ! validId3v2 )
     {
-        id3v1tag = f.ID3v1Tag();
-        
-        if(id3v1tag && !id3v1tag->isEmpty())
+        if(other_tag && !other_tag->isEmpty() )
         {
             /// ID3v1 is assumed to be Latin1 and Ogg Vorbis comments use UTF8.
-            gdkStringTaglib2NS(artist, id3v1tag->artist());
-            gdkStringTaglib2NS(title, id3v1tag->title());
-            gdkStringTaglib2NS(album, id3v1tag->album());
-            gdkStringTaglib2NS(genre, id3v1tag->genre());
+            gdkStringTaglib2NS(artist, other_tag->artist());
+            gdkStringTaglib2NS(title, other_tag->title());
+            gdkStringTaglib2NS(album, other_tag->album());
+            gdkStringTaglib2NS(genre, other_tag->genre());
             
- 
-           
+            
+            
             
             char _year[256];
             _year[0]='\0';
-            uint uYear=id3v1tag->year();
+            uint uYear=other_tag->year();
             if(uYear!=0)
             {
                 sprintf(_year, "%d" ,uYear);
@@ -334,31 +323,84 @@ bool getID3Info(const char * filename , NSMutableString *artist , NSMutableStrin
     }
     
     
-    if(validId3v2  || validId3v1)
+    
+    //if the title is empty ,we will use the filename
+    //without suffix
+    if (title.length==0)
     {
-        //if the title is empty ,we will use the filename
-        //without suffix
-        if (title.length==0)
-        {
-            std::string url(filename);
+        std::string url(filename);
 #ifdef _WINDOW
-            int a=url.find_last_of('\\');
+        int a=url.find_last_of('\\');
 #else
-            int a=(int)url.find_last_of('/');
+        int a=(int)url.find_last_of('/');
 #endif
-            int b=(int)url.find_last_of('.');
-            if (a<b && b!=url.npos)
-            {
-                std::string title2=url.substr(a+1,b-(a+1));
-                [title setString:[NSString stringWithUTF8String:title2.c_str()]];
-            }
-            
-            
+        int b=(int)url.find_last_of('.');
+        if (a<b && b!=url.npos)
+        {
+            std::string title2=url.substr(a+1,b-(a+1));
+            [title setString:[NSString stringWithUTF8String:title2.c_str()]];
         }
+        
+        
     }
     
     
-    return (validId3v2  || validId3v1) && (artist.length > 1 || title.length > 1 );
+    return true;
 }
 
 
+/// Reg gbk ,mpge only
+bool getID3Info(const char * filename , NSMutableString *artist , NSMutableString * title  ,NSMutableString *album, NSMutableString *genre, NSMutableString *year)
+{
+    if (strstr(filename, ".DS_Store") )
+        return false;
+    
+    ID3v2::Tag *id3v2tag;
+    ID3v1::Tag *id3v1tag;
+    
+    
+    NSString *lowser = [NSString stringWithUTF8String:filename].lowercaseString;
+    if( [lowser.pathExtension isEqualToString:@"wav"] )
+    {
+        RIFF::WAV::File file(filename);
+        
+        if (file.length() < 10)
+        {
+            return false;
+        }
+        
+        id3v2tag = file.ID3v2Tag();
+        RIFF::Info::Tag *info_tag = file.InfoTag();
+
+
+        
+        return getID3Info(id3v2tag, info_tag , filename, artist, title, album, genre, year);
+    }
+    else if( [lowser.pathExtension isEqualToString:@"mp3"] )
+    {
+        static MyLatin1StringHandler *handler = new MyLatin1StringHandler;
+        if (handler) {
+            ID3v2::Tag::setLatin1StringHandler(handler);
+            handler = nullptr;
+        }
+        
+        
+        MPEG::File file(filename);
+        if (file.length() < 10)
+        {
+            return false;
+        }
+        
+        id3v2tag = file.ID3v2Tag();
+        id3v1tag = file.ID3v1Tag();
+        
+
+        
+        return getID3Info(id3v2tag, id3v1tag, filename, artist, title, album, genre, year);
+    }
+    else
+    {
+        return false;
+    }
+    
+}
